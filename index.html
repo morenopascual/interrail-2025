@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Interrail · Julio 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Inter', sans-serif;
+  touch-action: none;
+}
+
+/* ── CITY SELECTOR SCREEN ── */
+#city-screen {
+  position: fixed; inset: 0;
+  background: #0a0a0a;
+  display: flex; flex-direction: column;
+  z-index: 200;
+}
+.cs-header {
+  padding: 56px 24px 24px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.cs-eyebrow {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: #f5c518; margin-bottom: 10px;
+}
+.cs-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px; line-height: 0.9;
+  color: #f5f3ee;
+}
+.cs-title span { color: #f5c518; }
+.cs-sub {
+  font-size: 13px; color: #555;
+  margin-top: 10px; line-height: 1.5;
+}
+
+.cs-cities {
+  flex: 1; overflow-y: auto;
+  padding: 16px 20px 32px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.cs-city-btn {
+  display: flex; align-items: center; gap: 14px;
+  background: #141414; border: 1px solid #1e1e1e;
+  border-radius: 14px; padding: 16px 18px;
+  cursor: pointer; transition: all 0.15s;
+  text-align: left; width: 100%;
+}
+.cs-city-btn:active { transform: scale(0.98); background: #1a1a1a; }
+.cs-city-flag { font-size: 28px; }
+.cs-city-info { flex: 1; }
+.cs-city-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; letter-spacing: 0.03em;
+  color: #f5f3ee; line-height: 1;
+}
+.cs-city-country {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: #444; margin-top: 3px;
+}
+.cs-city-count {
+  font-size: 11px; color: #333;
+  font-weight: 600;
+}
+.cs-arrow { color: #f5c518; font-size: 18px; }
+
+/* ── MAIN VIEWER ── */
+#viewer {
+  position: fixed; inset: 0;
+  display: none;
+}
+
+/* ── TOP BAR ── */
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 44px 16px 12px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 100%);
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  background: rgba(255,255,255,0.12); border: none;
+  color: #fff; font-size: 18px; width: 36px; height: 36px;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.city-title-bar {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 0.05em; color: #fff;
+  flex: 1;
+}
+
+/* ── MODE TOGGLE ── */
+.mode-toggle {
+  position: fixed; top: 96px; left: 50%; transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
+  display: flex; padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: none; border: none;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 7px 20px; border-radius: 24px;
+  cursor: pointer; transition: all 0.2s;
+}
+.mode-btn.active {
+  background: #f5c518; color: #000;
+}
+
+/* ── CARD STACK ── */
+.card-stack {
+  position: fixed; inset: 0;
+  overflow: hidden;
+}
+
+.card {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.card-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #1a1a1a;
+}
+/* Dark gradient overlay — strong at bottom for legibility, subtle at top */
+.card-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.05) 30%,
+    rgba(0,0,0,0.55) 60%,
+    rgba(0,0,0,0.88) 100%
+  );
+}
+
+.card-content {
+  position: relative; z-index: 2;
+  padding: 20px 20px 32px;
+}
+
+.card-badge-row {
+  display: flex; gap: 8px; align-items: center;
+  margin-bottom: 10px; flex-wrap: wrap;
+}
+.card-badge {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px;
+}
+.badge-free { background: rgba(74,222,128,0.2); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.badge-paid { background: rgba(251,146,60,0.2); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
+.badge-partial { background: rgba(129,140,248,0.2); color: #818cf8; border: 1px solid rgba(129,140,248,0.3); }
+.badge-time {
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.15);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 10px; border-radius: 20px;
+}
+
+.card-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(34px, 9vw, 48px);
+  line-height: 0.95; letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  margin-bottom: 10px;
+}
+
+.card-desc {
+  font-size: 14px; color: rgba(255,255,255,0.82);
+  line-height: 1.55; margin-bottom: 18px;
+  max-width: 360px;
+}
+
+.card-actions {
+  display: flex; gap: 10px; align-items: center;
+}
+
+.maps-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: #f5c518; color: #000;
+  border: none; border-radius: 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 700;
+  padding: 11px 18px; cursor: pointer;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.maps-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint {
+  position: fixed; bottom: 20px; right: 16px;
+  z-index: 100;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.scroll-dots {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.scroll-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: all 0.2s;
+}
+.scroll-dot.active {
+  background: #f5c518; transform: scale(1.4);
+}
+.scroll-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-top: 2px;
+}
+
+/* ── NIGHT CARD ACCENT ── */
+.card.night-mode .card-bg::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(10,0,30,0.2) 0%,
+    rgba(10,0,30,0.1) 30%,
+    rgba(10,0,30,0.6) 60%,
+    rgba(10,0,30,0.92) 100%
+  );
+}
+.card.night-mode .card-name { color: #f5c518; }
+.night-tag {
+  background: rgba(245,197,24,0.15); color: #f5c518;
+  border: 1px solid rgba(245,197,24,0.3);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- CITY SELECTOR -->
+<div id="city-screen">
+  <div class="cs-header">
+    <div class="cs-eyebrow">Interrail · Julio 2025</div>
+    <div class="cs-title">ELIGE<br><span>CIUDAD</span></div>
+    <div class="cs-sub">Swipe vertical para navegar entre sitios. Toca el pin para abrir Maps.</div>
+  </div>
+  <div class="cs-cities" id="cs-cities"></div>
+</div>
+
+<!-- CARD VIEWER -->
+<div id="viewer">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="city-title-bar" id="city-title-bar"></div>
+  </div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btn-ver" onclick="setMode('ver')">VER</button>
+    <button class="mode-btn" id="btn-salir" onclick="setMode('salir')">SALIR</button>
+  </div>
+
+  <div class="card-stack" id="card-stack"
+    style="touch-action: pan-y;"
+  ></div>
+
+  <div class="scroll-hint">
+    <div class="scroll-dots" id="scroll-dots"></div>
+    <div class="scroll-label">swipe</div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  amsterdam: {
+    name: "Ámsterdam", flag: "🇳🇱", country: "Países Bajos",
+    ver: [
+      {
+        name: "Casa de Anne Frank",
+        desc: "Historia real en el refugio original. Reserva online con días de antelación — sin reserva no entras.",
+        badge: "paid", badgeLabel: "De pago", time: "Primera hora",
+        img: "https://images.unsplash.com/photo-1584811644165-33db3b6d3a0c?w=800&q=80",
+        maps: "https://maps.google.com/?q=Casa+de+Anne+Frank,+Amsterdam"
+      },
+      {
+        name: "Museo Van Gogh",
+        desc: "La colección más completa del pintor. Bien curada, accesible y sin pretensiones. Merece la cola.",
+        badge: "paid", badgeLabel: "De pago", time: "Por la tarde",
+        img: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
+        maps: "https://maps.google.com/?q=Van+Gogh+Museum,+Amsterdam"
+      },
+      {
+        name: "Heineken Experience",
+        desc: "Interactivo, con catas incluidas y sin pretensiones culturales. Muy buen plan en grupo.",
+        badge: "paid", badgeLabel: "De pago", time: "Cualquier hora",
+        img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&q=80",
+        maps: "https://maps.google.com/?q=Heineken+Experience,+Amsterdam"
+      },
+      {
+        name: "Canales en boat tour",
+        desc: "Ver la ciudad desde el agua cambia la perspectiva. Al atardecer con luz dorada es la mejor versión de Ámsterdam.",
+        badge: "paid", badgeLabel: "De pago", time: "Atardecer",
+        img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
+        maps: "https://maps.google.com/?q=Canal+boat+tours+Amsterdam"
+      },
+      {
+        name: "Vondelpark",
+        desc: "El sitio donde los locales se desconectan. Césped, músicos callejeros y ambiente muy relajado.",
+        badge: "free", badgeLabel: "Gratis", time: "Mediodía",
+        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+        maps: "https://maps.google.com/?q=Vondelpark,+Amsterdam"
+      }
+    ],
+    salir: [
+      {
+        name: "Rembrandtplein",
+        desc: "Plaza neurálgica con bares, música en vivo y ambiente internacional. Entrar gratis, fácil conocer gente. Punto de partida perfecto para la noche.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h",
+        img: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
+        maps: "https://maps.google.com/?q=Rembrandtplein,+Amsterdam"
+      },
+      {
+        name: "Leidseplein",
+        desc: "La otra gran plaza nocturna. Terrazas, bares de música en vivo y acceso directo a los clubs. Menos turística que Rembrandtplein.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
+        img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
+        maps: "https://maps.google.com/?q=Leidseplein,+Amsterdam"
+      },
+      {
+        name: "Sugarfactory & Melkweg",
+        desc: "Dos clubs históricos a 2 minutos de Leidseplein. Programan electrónica, indie y rap. Busca en su web antes: hay eventos de precio accesible, especialmente entre semana.",
+        badge: "paid", badgeLabel: "Entrada variable", time: "Desde medianoche",
+        img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
+        maps: "https://maps.google.com/?q=Melkweg,+Amsterdam"
+      }
+    ]
+  },
+  berlin: {
+    name: "Berlín", flag: "🇩🇪", country: "Alemania",
+    ver: [
+      {
+        name: "Puerta de Brandeburgo",
+        desc: "Símbolo de la reunificación alemana. Tiene más peso histórico de lo que parece cuando estás delante.",
+        badge: "free", badgeLabel: "Gratis", time: "Cualquier hora",
+        img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80",
+        maps: "https://maps.google.com/?q=Brandenburg+Gate,+Berlin"
+      },
+      {
+        name: "Reichstag",
+        desc: "La cúpula de cristo tiene vistas brutales sobre la ciudad. Gratis, pero hay que reservar online con días de antelación.",
+        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
+        img: "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=80",
+        maps: "https://maps.google.com/?q=Reichstag,+Berlin"
+      },
+      {
+        name: "East Side Gallery",
+        desc: "El tramo más largo del Muro que queda en pie, convertido en galería de arte al aire libre. Muy distinto a verlo en fotos.",
+        badge: "free", badgeLabel: "Gratis", time: "Por la mañana",
+        img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80",
+        maps: "https://maps.google.com/?q=East+Side+Gallery,+Berlin"
+      },
+      {
+        name: "Klunkerkranich",
+        desc: "Terraza encima de un parking en Neukölln. Entrada mínima, vistas geniales y ambiente muy local. Una de las mejores sorpresas de la ciudad.",
+        badge: "partial", badgeLabel: "Entrada mínima", time: "Atardecer",
+        img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80",
+        maps: "https://maps.google.com/?q=Klunkerkranich,+Berlin"
+      }
+    ],
+    salir: [
+      {
+        name: "Späti Culture",
+        desc: "Compra una cerveza en cualquier tienda de conveniencia (Späti) y bébetela en la calle. No es ahorrar dinero — es lo que hacen los berlineses. Busca un canal o una plaza y ya tienes plan.",
+        badge: "free", badgeLabel: "Casi gratis", time: "Toda la noche",
+        img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80",
+        maps: "https://maps.google.com/?q=Kreuzberg,+Berlin"
+      },
+      {
+        name: "Kreuzberg",
+        desc: "Decenas de bares sin dress code, sin etiqueta y sin precios inflados. La mayoría no cobran entrada. Ambiente muy mixto: estudiantes, artistas, locales de toda la vida.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
+        img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80",
+        maps: "https://maps.google.com/?q=Kreuzberg,+Berlin"
+      },
+      {
+        name: "Neukölln",
+        desc: "El barrio más alternativo de Berlín. Bares pequeños, eventos de artistas emergentes y precios de barrio. Sigue la misma lógica que Kreuzberg pero con menos gente de paso.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 23h",
+        img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
+        maps: "https://maps.google.com/?q=Neukölln,+Berlin"
+      }
+    ]
+  },
+  praga: {
+    name: "Praga", flag: "🇨🇿", country: "República Checa",
+    ver: [
+      {
+        name: "Puente de Carlos",
+        desc: "Medieval, con estatuas en los laterales y vistas al río. Al amanecer está vacío y es otra experiencia completamente distinta.",
+        badge: "free", badgeLabel: "Gratis", time: "Amanecer",
+        img: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
+        maps: "https://maps.google.com/?q=Charles+Bridge,+Prague"
+      },
+      {
+        name: "Castillo de Praga",
+        desc: "El complejo histórico más grande del mundo, según miden. Patios, catedrales y vistas sobre toda la ciudad. La entrada al exterior es gratis.",
+        badge: "partial", badgeLabel: "Parcialmente gratis", time: "Por la mañana",
+        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
+        maps: "https://maps.google.com/?q=Prague+Castle"
+      },
+      {
+        name: "Riegrovy Sady",
+        desc: "Parque elevado con vistas a la ciudad y terraza de cerveza donde van los locales. El plan más sencillo y más perfecto de una tarde en Praga.",
+        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
+        img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80",
+        maps: "https://maps.google.com/?q=Riegrovy+sady,+Prague"
+      }
+    ],
+    salir: [
+      {
+        name: "Žižkov",
+        desc: "El barrio con más bares por metro cuadrado de Europa (no es un mito). Precios de estudiante, ambiente 100% local y cero turistización. Nada está a más de cinco minutos andando.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h",
+        img: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
+        maps: "https://maps.google.com/?q=Žižkov,+Prague"
+      },
+      {
+        name: "Lucerna Music Bar",
+        desc: "Sala histórica con noches temáticas (90s, pop, indie) muy baratas y muy divertidas. Mira la programación cuando llegues — si hay algo esa noche, ve.",
+        badge: "paid", badgeLabel: "Entrada asequible", time: "A partir de las 22h",
+        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
+        maps: "https://maps.google.com/?q=Lucerna+Music+Bar,+Prague"
+      }
+    ]
+  },
+  budapest: {
+    name: "Budapest", flag: "🇭🇺", country: "Hungría",
+    ver: [
+      {
+        name: "Szimpla Kert",
+        desc: "El primer Ruin Bar del mundo y todavía el mejor. Un edificio en ruinas convertido en laberinto de salas y patios. Único en Europa.",
+        badge: "free", badgeLabel: "Gratis (pagas consumición)", time: "Noche",
+        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
+        maps: "https://maps.google.com/?q=Szimpla+Kert,+Budapest"
+      },
+      {
+        name: "Baños Széchenyi",
+        desc: "Termas neobarrocas de 1913 con piscinas exteriores de agua caliente. Por la noche hay ambiente de fiesta. Una experiencia que no existe igual en ningún otro sitio.",
+        badge: "paid", badgeLabel: "De pago", time: "Mañana o noche",
+        img: "https://images.unsplash.com/photo-1549154651-e76390a20a17?w=800&q=80",
+        maps: "https://maps.google.com/?q=Szechenyi+Baths,+Budapest"
+      },
+      {
+        name: "Parlamento iluminado",
+        desc: "Uno de los edificios más impresionantes de Europa visto desde la ribera del Danubio. De noche iluminado es especialmente brutal. No hace falta entrar.",
+        badge: "free", badgeLabel: "Gratis (exterior)", time: "Noche",
+        img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80",
+        maps: "https://maps.google.com/?q=Hungarian+Parliament,+Budapest"
+      }
+    ],
+    salir: [
+      {
+        name: "Distrito VII — Ruin Bars",
+        desc: "El epicentro. Varios edificios de principios del siglo XX en diferentes estados de abandono reconvertidos en bares de varios pisos. Ambiente joven y cosmopolita. Empieza en Szimpla y deja que la noche lleve al resto.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
+        img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80",
+        maps: "https://maps.google.com/?q=Jewish+Quarter+Budapest+nightlife"
+      }
+    ]
+  },
+  munich: {
+    name: "Múnich", flag: "🇩🇪", country: "Alemania",
+    ver: [
+      {
+        name: "Jardín Inglés + Eisbach",
+        desc: "Un parque más grande que el Central Park con un canal donde hay surfistas haciendo olas artificiales. Tan raro como suena y muy divertido de ver.",
+        badge: "free", badgeLabel: "Gratis", time: "Mediodía",
+        img: "https://images.unsplash.com/photo-1573676048621-0e103c0e02e4?w=800&q=80",
+        maps: "https://maps.google.com/?q=Eisbach+surfers,+Munich"
+      },
+      {
+        name: "Viktualienmarkt",
+        desc: "Mercado tradicional bávaro con cervecería al aire libre en el centro. Comer ahí con una Maß en la mano es el plan más auténtico de Múnich.",
+        badge: "free", badgeLabel: "Gratis el paseo", time: "Mediodía",
+        img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
+        maps: "https://maps.google.com/?q=Viktualienmarkt,+Munich"
+      }
+    ],
+    salir: [
+      {
+        name: "Flaucher (río Isar)",
+        desc: "Los locales traen su propia cerveza, ponen música y montan un picnic en la orilla del río. Sin entrada, sin consumición mínima. El plan joven por excelencia cuando hace calor — en julio es casi seguro.",
+        badge: "free", badgeLabel: "Casi gratis", time: "Desde la tarde",
+        img: "https://images.unsplash.com/photo-1573676048621-0e103c0e02e4?w=800&q=80",
+        maps: "https://maps.google.com/?q=Flaucher,+Munich"
+      },
+      {
+        name: "Maxvorstadt",
+        desc: "El barrio universitario de Múnich. Bares de copas y cervecerías con clientela mayoritariamente estudiante. Precios más ajustados que en el centro turístico.",
+        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
+        img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
+        maps: "https://maps.google.com/?q=Maxvorstadt,+Munich"
+      }
+    ]
+  }
+};
+
+const CITY_ORDER = ['amsterdam','berlin','praga','budapest','munich'];
+
+let currentCity = null;
+let currentMode = 'ver';
+let currentIndex = 0;
+let cards = [];
+let isDragging = false;
+let startY = 0;
+let currentTranslate = 0;
+
+// Build city selector
+function buildCitySelector() {
+  const container = document.getElementById('cs-cities');
+  container.innerHTML = '';
+  CITY_ORDER.forEach(id => {
+    const city = DATA[id];
+    const btn = document.createElement('button');
+    btn.className = 'cs-city-btn';
+    const totalCards = city.ver.length + city.salir.length;
+    btn.innerHTML = `
+      <span class="cs-city-flag">${city.flag}</span>
+      <div class="cs-city-info">
+        <div class="cs-city-name">${city.name}</div>
+        <div class="cs-city-country">${city.country}</div>
+      </div>
+      <div class="cs-city-count">${city.ver.length} ver · ${city.salir.length} salir</div>
+      <span class="cs-arrow">›</span>
+    `;
+    btn.onclick = () => openCity(id);
+    container.appendChild(btn);
+  });
+}
+
+function openCity(id) {
+  currentCity = id;
+  currentMode = 'ver';
+  currentIndex = 0;
+  document.getElementById('city-screen').style.display = 'none';
+  document.getElementById('viewer').style.display = 'block';
+  document.getElementById('city-title-bar').textContent = DATA[id].flag + '  ' + DATA[id].name.toUpperCase();
+  document.getElementById('btn-ver').classList.add('active');
+  document.getElementById('btn-salir').classList.remove('active');
+  renderCards();
+}
+
+function goBack() {
+  document.getElementById('viewer').style.display = 'none';
+  document.getElementById('city-screen').style.display = 'flex';
+  currentCity = null;
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  currentIndex = 0;
+  document.getElementById('btn-ver').classList.toggle('active', mode === 'ver');
+  document.getElementById('btn-salir').classList.toggle('active', mode === 'salir');
+  renderCards();
+}
+
+function renderCards() {
+  const stack = document.getElementById('card-stack');
+  stack.innerHTML = '';
+  cards = [];
+  const items = DATA[currentCity][currentMode];
+
+  items.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card' + (currentMode === 'salir' ? ' night-mode' : '');
+    card.style.transform = `translateY(${(i - 0) * 100}%)`;
+
+    let badgeClass = item.badge === 'free' ? 'badge-free' : item.badge === 'paid' ? 'badge-paid' : 'badge-partial';
+
+    card.innerHTML = `
+      <div class="card-bg" style="background-image:url('${item.img}')"></div>
+      <div class="card-content">
+        <div class="card-badge-row">
+          <span class="card-badge ${badgeClass}">${item.badgeLabel}</span>
+          <span class="badge-time">⏱ ${item.time}</span>
+          ${currentMode === 'salir' ? '<span class="night-tag">🌙 SALIR</span>' : ''}
+        </div>
+        <div class="card-name">${item.name}</div>
+        <div class="card-desc">${item.desc}</div>
+        <div class="card-actions">
+          <a href="${item.maps}" target="_blank" class="maps-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Abrir en Maps
+          </a>
+        </div>
+      </div>
+    `;
+    stack.appendChild(card);
+    cards.push(card);
+  });
+
+  updatePositions(true);
+  renderDots();
+}
+
+function updatePositions(instant) {
+  cards.forEach((card, i) => {
+    const offset = (i - currentIndex) * 100;
+    if (instant) card.style.transition = 'none';
+    else card.style.transition = 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)';
+    card.style.transform = `translateY(${offset}%)`;
+  });
+}
+
+function renderDots() {
+  const dotsEl = document.getElementById('scroll-dots');
+  dotsEl.innerHTML = '';
+  cards.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'scroll-dot' + (i === currentIndex ? ' active' : '');
+    dotsEl.appendChild(dot);
+  });
+}
+
+function goTo(index) {
+  if (index < 0 || index >= cards.length) return;
+  currentIndex = index;
+  updatePositions(false);
+  renderDots();
+}
+
+// Touch & mouse swipe
+const stack = document.getElementById('card-stack');
+
+function onStart(y) {
+  isDragging = true;
+  startY = y;
+  currentTranslate = 0;
+  cards.forEach(c => c.style.transition = 'none');
+}
+
+function onMove(y) {
+  if (!isDragging) return;
+  const delta = y - startY;
+  currentTranslate = delta;
+  cards.forEach((card, i) => {
+    const base = (i - currentIndex) * window.innerHeight;
+    card.style.transform = `translateY(${base + delta}px)`;
+  });
+}
+
+function onEnd(y) {
+  if (!isDragging) return;
+  isDragging = false;
+  const delta = y - startY;
+  const threshold = window.innerHeight * 0.18;
+  if (delta < -threshold) goTo(currentIndex + 1);
+  else if (delta > threshold) goTo(currentIndex - 1);
+  else goTo(currentIndex);
+}
+
+stack.addEventListener('touchstart', e => onStart(e.touches[0].clientY), { passive: true });
+stack.addEventListener('touchmove', e => onMove(e.touches[0].clientY), { passive: true });
+stack.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientY));
+
+stack.addEventListener('mousedown', e => onStart(e.clientY));
+window.addEventListener('mousemove', e => { if (isDragging) onMove(e.clientY); });
+window.addEventListener('mouseup', e => onEnd(e.clientY));
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!currentCity) return;
+  if (e.key === 'ArrowDown') goTo(currentIndex + 1);
+  if (e.key === 'ArrowUp') goTo(currentIndex - 1);
+  if (e.key === 'Escape') goBack();
+});
+
+buildCitySelector();
+</script>
+</body>
+</html>
