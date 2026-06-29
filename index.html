@@ -9,6 +9,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Inter', sans-serif; touch-action: none; }
 
+/* CITY SELECTOR */
 #city-screen { position: fixed; inset: 0; background: #0a0a0a; display: flex; flex-direction: column; z-index: 200; }
 .cs-header { padding: 56px 24px 24px; border-bottom: 1px solid #1a1a1a; }
 .cs-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #f5c518; margin-bottom: 10px; }
@@ -22,21 +23,26 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
 .cs-city-info { flex: 1; }
 .cs-city-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; color: #f5f3ee; line-height: 1; }
 .cs-city-country { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #444; margin-top: 3px; }
-.cs-city-count { font-size: 11px; color: #333; font-weight: 600; }
+.cs-city-dates { font-size: 11px; color: #f5c518; font-weight: 600; margin-top: 2px; }
 .cs-arrow { color: #f5c518; font-size: 18px; }
 
-#viewer { position: fixed; inset: 0; display: none; }
-.top-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 44px 16px 12px; background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 100%); display: flex; align-items: center; gap: 12px; }
+/* VIEWER */
+#viewer { position: fixed; inset: 0; display: none; flex-direction: column; }
+
+/* TOP BAR */
+.top-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 44px 16px 12px; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); display: flex; align-items: center; gap: 12px; }
 .back-btn { background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 18px; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .city-title-bar { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.05em; color: #fff; flex: 1; }
 
-.mode-toggle { position: fixed; top: 96px; left: 50%; transform: translateX(-50%); z-index: 100; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; display: flex; padding: 3px; gap: 2px; }
-.mode-btn { background: none; border: none; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 7px 20px; border-radius: 24px; cursor: pointer; transition: all 0.2s; }
+/* MODE TOGGLE — 4 tabs */
+.mode-toggle { position: fixed; top: 96px; left: 50%; transform: translateX(-50%); z-index: 100; background: rgba(0,0,0,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; display: flex; padding: 3px; gap: 2px; white-space: nowrap; }
+.mode-btn { background: none; border: none; color: rgba(255,255,255,0.45); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 12px; border-radius: 24px; cursor: pointer; transition: all 0.2s; }
 .mode-btn.active { background: #f5c518; color: #000; }
 
+/* CARD STACK */
 .card-stack { position: fixed; inset: 0; overflow: hidden; }
-.card { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); will-change: transform; }
-.card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-color: #1a1a1a; }
+.card { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-color: #111; }
 .card-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.88) 100%); }
 .card-content { position: relative; z-index: 2; padding: 20px 20px 36px; }
 .card-badge-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
@@ -46,21 +52,40 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
 .badge-partial { background: rgba(129,140,248,0.2); color: #818cf8; border: 1px solid rgba(129,140,248,0.3); }
 .badge-time { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; padding: 4px 10px; border-radius: 20px; }
 .badge-warn { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
-.card-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 9vw, 48px); line-height: 0.95; letter-spacing: 0.02em; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.5); margin-bottom: 10px; }
+.card-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 8vw, 44px); line-height: 0.95; letter-spacing: 0.02em; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.5); margin-bottom: 10px; }
 .card-desc { font-size: 14px; color: rgba(255,255,255,0.82); line-height: 1.6; margin-bottom: 18px; max-width: 360px; }
-.card-actions { display: flex; gap: 10px; align-items: center; }
+.card-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .maps-btn { display: flex; align-items: center; gap: 8px; background: #f5c518; color: #000; border: none; border-radius: 28px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; padding: 11px 18px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
 .maps-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.night-tag { background: rgba(245,197,24,0.15); color: #f5c518; border: 1px solid rgba(245,197,24,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+.card.night-mode .card-bg::after { background: linear-gradient(to bottom, rgba(10,0,30,0.2) 0%, rgba(10,0,30,0.1) 30%, rgba(10,0,30,0.6) 60%, rgba(10,0,30,0.92) 100%); }
+.card.night-mode .card-name { color: #f5c518; }
 
+/* TRANSPORT CARD */
+.card.transport-mode .card-bg::after { background: linear-gradient(to bottom, rgba(0,10,30,0.3) 0%, rgba(0,10,30,0.15) 30%, rgba(0,10,30,0.7) 60%, rgba(0,10,30,0.95) 100%); }
+.card.transport-mode .card-name { color: #60a5fa; }
+.transport-tag { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+.transport-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.transport-row { display: flex; align-items: flex-start; gap: 10px; }
+.transport-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); min-width: 64px; padding-top: 1px; }
+.transport-value { font-size: 14px; color: rgba(255,255,255,0.88); line-height: 1.4; }
+.transport-value strong { color: #fff; font-weight: 700; }
+.transport-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 0; }
+.transfer-chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 4px 8px; font-size: 11px; color: rgba(255,255,255,0.6); margin: 2px 2px 0 0; }
+
+/* ACCOMMODATION CARD */
+.card.accom-mode .card-bg::after { background: linear-gradient(to bottom, rgba(0,20,10,0.3) 0%, rgba(0,20,10,0.15) 30%, rgba(0,20,10,0.7) 60%, rgba(0,20,10,0.95) 100%); }
+.card.accom-mode .card-name { color: #34d399; }
+.accom-tag { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+.accom-address { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.5; margin-bottom: 6px; }
+.accom-nights { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+
+/* DOTS */
 .scroll-hint { position: fixed; bottom: 20px; right: 16px; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .scroll-dots { display: flex; flex-direction: column; gap: 4px; }
 .scroll-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: all 0.2s; }
 .scroll-dot.active { background: #f5c518; transform: scale(1.4); }
 .scroll-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 2px; }
-
-.card.night-mode .card-bg::after { background: linear-gradient(to bottom, rgba(10,0,30,0.2) 0%, rgba(10,0,30,0.1) 30%, rgba(10,0,30,0.6) 60%, rgba(10,0,30,0.92) 100%); }
-.card.night-mode .card-name { color: #f5c518; }
-.night-tag { background: rgba(245,197,24,0.15); color: #f5c518; border: 1px solid rgba(245,197,24,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
 </style>
 </head>
 <body>
@@ -69,7 +94,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
   <div class="cs-header">
     <div class="cs-eyebrow">Interrail · Julio 2025</div>
     <div class="cs-title">ELIGE<br><span>CIUDAD</span></div>
-    <div class="cs-sub">Swipe vertical para navegar entre sitios. Toca el pin para abrir Maps.</div>
+    <div class="cs-sub">Swipe vertical para navegar. Toca el pin para abrir Maps.</div>
   </div>
   <div class="cs-cities" id="cs-cities"></div>
 </div>
@@ -79,10 +104,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
     <button class="back-btn" onclick="goBack()">←</button>
     <div class="city-title-bar" id="city-title-bar"></div>
   </div>
-  <div class="mode-toggle">
-    <button class="mode-btn active" id="btn-ver" onclick="setMode('ver')">VER</button>
-    <button class="mode-btn" id="btn-salir" onclick="setMode('salir')">SALIR</button>
-  </div>
+  <div class="mode-toggle" id="mode-toggle"></div>
   <div class="card-stack" id="card-stack"></div>
   <div class="scroll-hint">
     <div class="scroll-dots" id="scroll-dots"></div>
@@ -91,406 +113,298 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
 </div>
 
 <script>
+// ── TRANSPORT DATA ──
+const TRANSPORT = {
+  amsterdam: {
+    arrival: {
+      type: "✈️ Vuelo",
+      label: "LLEGADA",
+      from: "Madrid T4 → Aeropuerto Ámsterdam",
+      date: "1 Jul · 11:30 → 14:10",
+      code: "IB1791",
+      airline: "Iberia",
+      transfers: []
+    },
+    departure: {
+      type: "🚌 Bus",
+      label: "SALIDA",
+      from: "Ámsterdam Sloterdijk → Rotterdam Central",
+      date: "3 Jul · 11:45 → 13:25",
+      code: null,
+      airline: null,
+      transfers: []
+    }
+  },
+  rotterdam: {
+    arrival: {
+      type: "🚌 Bus",
+      label: "LLEGADA",
+      from: "Ámsterdam Sloterdijk → Rotterdam Central",
+      date: "3 Jul · 11:45 → 13:25",
+      code: null, airline: null, transfers: []
+    },
+    departure: {
+      type: "🚂 Tren",
+      label: "SALIDA",
+      from: "Rotterdam Central → Berlin Südkreuz",
+      date: "4 Jul · 7:20 → 15:18",
+      code: null, airline: null,
+      transfers: ["Utrecht Central (30 min)", "Duisburg Hbf (30 min)"]
+    }
+  },
+  berlin: {
+    arrival: {
+      type: "🚂 Tren",
+      label: "LLEGADA",
+      from: "Rotterdam Central → Berlin Südkreuz",
+      date: "4 Jul · 7:20 → 15:18",
+      code: null, airline: null,
+      transfers: ["Utrecht Central (30 min)", "Duisburg Hbf (30 min)"]
+    },
+    departure: {
+      type: "🚂 Tren nocturno",
+      label: "SALIDA",
+      from: "Berlin Südkreuz → Praha hl.n",
+      date: "6 Jul · 1:14 → 5:25",
+      code: null, airline: null,
+      transfers: ["Directo — no hay transbordo"]
+    }
+  },
+  praga: {
+    arrival: {
+      type: "🚂 Tren nocturno",
+      label: "LLEGADA",
+      from: "Berlin Südkreuz → Praha hl.n",
+      date: "6 Jul · 1:14 → 5:25",
+      code: null, airline: null,
+      transfers: ["Directo"]
+    },
+    departure: {
+      type: "🚂 Tren",
+      label: "SALIDA",
+      from: "Praha hl.n → Budapest Nyugati",
+      date: "8 Jul · 6:01 → 13:49",
+      code: null, airline: null,
+      transfers: ["Estación Central de Viena (20 min)", "Budapest-Kelenföld (10 min)"]
+    }
+  },
+  budapest: {
+    arrival: {
+      type: "🚂 Tren",
+      label: "LLEGADA",
+      from: "Praha hl.n → Budapest Nyugati",
+      date: "8 Jul · 6:01 → 13:49",
+      code: null, airline: null,
+      transfers: ["Viena Hbf (20 min)", "Budapest-Kelenföld (10 min)"]
+    },
+    departure: {
+      type: "✈️ Vuelo",
+      label: "SALIDA",
+      from: "Aeropuerto Budapest → Aeropuerto Nápoles",
+      date: "9 Jul · 14:25 → 16:10",
+      code: "WNDFSM",
+      airline: "Wizz Air Malta",
+      transfers: []
+    }
+  },
+  split: {
+    arrival: {
+      type: "✈️ Vuelo",
+      label: "LLEGADA",
+      from: "Aeropuerto Nápoles → Aeropuerto Split",
+      date: "10 Jul · 6:15 → 7:15",
+      code: "P9QZYM",
+      airline: "Volotea",
+      transfers: []
+    },
+    departure: {
+      type: "🚂 Tren nocturno",
+      label: "SALIDA",
+      from: "Estación Split → München Hbf",
+      date: "13 Jul · 17:20 → 14 Jul 12:09",
+      code: null, airline: null,
+      transfers: ["Dobova (51 min)", "Ljubljana (15 min)", "Villach Hbf (6 min)"]
+    }
+  },
+  munich: {
+    arrival: {
+      type: "🚂 Tren nocturno",
+      label: "LLEGADA",
+      from: "Estación Split → München Hbf",
+      date: "13 Jul 17:20 → 14 Jul · 12:09",
+      code: null, airline: null,
+      transfers: ["Dobova (51 min)", "Ljubljana (15 min)", "Villach Hbf (6 min)"]
+    },
+    departure: {
+      type: "✈️ Vuelo",
+      label: "SALIDA",
+      from: "Aeropuerto Múnich T1 → Madrid",
+      date: "16 Jul · 12:10 → 15:00",
+      code: "IB1310",
+      airline: "Iberia",
+      transfers: []
+    }
+  }
+};
+
+// ── ACCOMMODATION DATA ──
+const ACCOM = {
+  amsterdam: {
+    address: "Beursstraat 23, Ámsterdam, 1012 JV",
+    nights: "Noches: 1, 2 Jul (2 noches)",
+    maps: "https://maps.google.com/?q=Beursstraat+23,+Amsterdam+1012+JV"
+  },
+  rotterdam: null,
+  berlin: {
+    address: "Möckernstrasse 113, 10963 Berlín (Friedrichshain-Kreuzberg)",
+    nights: "Noches: 4, 5 Jul (2 noches)",
+    maps: "https://maps.google.com/?q=Möckernstrasse+113,+10963+Berlin"
+  },
+  praga: {
+    address: "Elišky Krásnohorské 2, Praga, 110 00",
+    nights: "Noches: 6, 7 Jul (2 noches)",
+    maps: "https://maps.google.com/?q=Elišky+Krásnohorské+2,+Prague+110+00"
+  },
+  budapest: {
+    address: "Rumbach Sebestyén utca 10, Budapest, 1075",
+    nights: "Noche: 8 Jul (1 noche)",
+    maps: "https://maps.google.com/?q=Rumbach+Sebestyén+utca+10,+Budapest+1075"
+  },
+  split: {
+    address: "Put Znjana 27b, 21000 Split, Croacia",
+    nights: "Noches: 10, 11, 12 Jul (3 noches)",
+    maps: "https://maps.google.com/?q=Put+Znjana+27b,+21000+Split"
+  },
+  munich: {
+    address: "Schwanthalerstraße 88, Múnich, 80336",
+    nights: "Noches: 14, 15 Jul (2 noches)",
+    maps: "https://maps.google.com/?q=Schwanthalerstraße+88,+Munich+80336"
+  }
+};
+
+// ── CITY META ──
+const CITY_META = {
+  amsterdam: { dates: "1–3 Jul" },
+  rotterdam: { dates: "3–4 Jul · paso" },
+  berlin:    { dates: "4–6 Jul" },
+  praga:     { dates: "6–8 Jul" },
+  budapest:  { dates: "8–9 Jul" },
+  split:     { dates: "10–13 Jul" },
+  munich:    { dates: "14–16 Jul" }
+};
+
+// ── SIGHTS & NIGHTLIFE DATA ──
 const DATA = {
   amsterdam: {
     name: "Ámsterdam", flag: "🇳🇱", country: "Países Bajos",
     ver: [
-      {
-        name: "Casa de Anne Frank",
-        desc: "El diario que leíste en el cole cobró otra dimensión cuando estás en el refugio real donde se escondieron. Es pequeño, es agobiante y es imposible salir sin que te haya movido algo por dentro. IMPORTANTE: reserva online con mínimo 2-3 semanas de antelación en julio. Sin reserva no entras, sin excepción.",
-        badge: "paid", badgeLabel: "De pago", time: "Primera hora",
-        img: "https://images.unsplash.com/photo-1584811644165-33db3b6d3a0c?w=800&q=80",
-        maps: "https://maps.google.com/?q=Anne+Frank+House,+Amsterdam"
-      },
-      {
-        name: "Museo Van Gogh",
-        desc: "No es un museo aburrido de cuadros detrás de un cristal. Está montado para que entiendas cómo pensaba y cómo veía el mundo este tipo que vendió un solo cuadro en vida. Las salas de los últimos meses antes de morir son de otro nivel. Reserva también online con semanas de antelación — en julio se agota rapidísimo.",
-        badge: "paid", badgeLabel: "De pago", time: "Por la tarde",
-        img: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
-        maps: "https://maps.google.com/?q=Van+Gogh+Museum,+Amsterdam"
-      },
-      {
-        name: "Heineken Experience",
-        desc: "Básicamente te explican cómo se hace la cerveza más famosa del mundo y al final te dan catas. Interactivo, sin pretensiones culturales y muy disfrutable en grupo. No es barato pero el precio incluye las consumiciones y el rato que echas es bastante bueno.",
-        badge: "paid", badgeLabel: "De pago", time: "Cualquier hora",
-        img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&q=80",
-        maps: "https://maps.google.com/?q=Heineken+Experience,+Amsterdam"
-      },
-      {
-        name: "Canales en boat tour",
-        desc: "Ámsterdam desde el agua es literalmente otra ciudad. Los canales del siglo XVII, las casas inclinadas que parecen a punto de caerse, los puentes bajos — todo tiene más sentido visto desde abajo. Al atardecer con la luz dorada es la mejor versión posible. Vale el precio sin dudarlo.",
-        badge: "paid", badgeLabel: "De pago", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
-        maps: "https://maps.google.com/?q=Canal+boat+tours+Amsterdam"
-      },
-      {
-        name: "Jordaan & Negen Straatjes",
-        desc: "El barrio más bonito de Ámsterdam y el que menos turistas tiene. Callejuelas con tiendas vintage, cafés tranquilos y casas del siglo XVII perfectamente conservadas. Las Negen Straatjes (Nueve Calles) son nueve callejones paralelos llenos de sitios raros y chulos para curiosear. El mejor plan si necesitas un respiro del caos del centro.",
-        badge: "free", badgeLabel: "Gratis", time: "Mañana o tarde",
-        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-        maps: "https://maps.google.com/?q=Jordaan,+Amsterdam"
-      },
-      {
-        name: "Vondelpark",
-        desc: "El parque donde los holandeses van a desconectar. En julio está lleno de gente tumbada en el césped, músicos callejeros improvisando y ambiente muy relajado. Perfecto para comer algo barato, recuperar energía entre sitios y simplemente no hacer nada durante un rato.",
-        badge: "free", badgeLabel: "Gratis", time: "Mediodía",
-        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-        maps: "https://maps.google.com/?q=Vondelpark,+Amsterdam"
-      }
+      { name: "Casa de Anne Frank", desc: "El diario que leíste en el cole cobra otra dimensión cuando estás en el refugio real donde se escondieron. Es pequeño, es agobiante y es imposible salir sin que te haya movido algo por dentro. IMPORTANTE: reserva online con mínimo 2-3 semanas de antelación en julio. Sin reserva no entras, sin excepción.", badge: "paid", badgeLabel: "De pago", time: "Primera hora", img: "https://images.unsplash.com/photo-1584811644165-33db3b6d3a0c?w=800&q=80", maps: "https://maps.google.com/?q=Anne+Frank+House,+Amsterdam" },
+      { name: "Museo Van Gogh", desc: "No es un museo aburrido de cuadros detrás de un cristal. Está montado para que entiendas cómo pensaba este tipo que vendió un solo cuadro en vida. Las salas de los últimos meses antes de morir son de otro nivel. Reserva online con semanas de antelación — en julio se agota rapidísimo.", badge: "paid", badgeLabel: "De pago", time: "Por la tarde", img: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80", maps: "https://maps.google.com/?q=Van+Gogh+Museum,+Amsterdam" },
+      { name: "Heineken Experience", desc: "Te explican cómo se hace la cerveza más famosa del mundo y al final te dan catas. Interactivo, sin pretensiones culturales y muy disfrutable en grupo. No es barato pero el precio incluye las consumiciones y el rato que echas es bastante bueno.", badge: "paid", badgeLabel: "De pago", time: "Cualquier hora", img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&q=80", maps: "https://maps.google.com/?q=Heineken+Experience,+Amsterdam" },
+      { name: "Canales en boat tour", desc: "Ámsterdam desde el agua es literalmente otra ciudad. Los canales del siglo XVII, las casas inclinadas que parecen a punto de caerse, los puentes bajos — todo tiene más sentido visto desde abajo. Al atardecer con la luz dorada es la mejor versión posible.", badge: "paid", badgeLabel: "De pago", time: "Atardecer", img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80", maps: "https://maps.google.com/?q=Canal+boat+tours+Amsterdam" },
+      { name: "Jordaan & Negen Straatjes", desc: "El barrio más bonito de Ámsterdam y el que menos turistas tiene. Callejuelas con tiendas vintage, cafés tranquilos y casas del siglo XVII perfectamente conservadas. Las Negen Straatjes son nueve callejones llenos de sitios raros y chulos para curiosear. El mejor plan si necesitas un respiro del caos del centro.", badge: "free", badgeLabel: "Gratis", time: "Mañana o tarde", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", maps: "https://maps.google.com/?q=Jordaan,+Amsterdam" },
+      { name: "Vondelpark", desc: "El parque donde los holandeses van a desconectar. En julio está lleno de gente tumbada en el césped, músicos callejeros improvisando y ambiente muy relajado. Perfecto para comer algo barato, recuperar energía y simplemente no hacer nada durante un rato.", badge: "free", badgeLabel: "Gratis", time: "Mediodía", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", maps: "https://maps.google.com/?q=Vondelpark,+Amsterdam" }
     ],
     salir: [
-      {
-        name: "Rembrandtplein",
-        desc: "La plaza más animada de la ciudad cuando cae la noche. Bares en cada esquina, terrazas a rebosar, música en vivo saliendo por todas partes y un ambiente muy internacional donde es facilísimo conocer gente. Entrar no cuesta nada y es el punto de partida perfecto para calibrar dónde seguir.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h",
-        img: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
-        maps: "https://maps.google.com/?q=Rembrandtplein,+Amsterdam"
-      },
-      {
-        name: "Leidseplein",
-        desc: "La otra gran plaza nocturna, un poco menos masificada que Rembrandtplein. Terrazas más tranquilas, bares con música en directo y acceso andando a los clubs principales. Si Rembrandtplein está a tope, aquí siempre hay sitio y el ambiente es igual de bueno.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
-        maps: "https://maps.google.com/?q=Leidseplein,+Amsterdam"
-      },
-      {
-        name: "Sugarfactory & Melkweg",
-        desc: "Los dos clubs más interesantes de la ciudad, a dos minutos de Leidseplein. Programan de todo: electrónica, indie, noches de rap, conciertos. La clave es mirar su web antes de salir — hay eventos de entrada asequible especialmente entre semana. No te presentes sin haber mirado.",
-        badge: "paid", badgeLabel: "Entrada variable", time: "Desde medianoche",
-        img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
-        maps: "https://maps.google.com/?q=Melkweg,+Amsterdam"
-      }
+      { name: "Rembrandtplein", desc: "La plaza más animada cuando cae la noche. Bares en cada esquina, terrazas a rebosar, música en vivo y ambiente muy internacional donde es facilísimo conocer gente. Entrar no cuesta nada y es el punto de partida perfecto para calibrar dónde seguir.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h", img: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80", maps: "https://maps.google.com/?q=Rembrandtplein,+Amsterdam" },
+      { name: "Leidseplein", desc: "La otra gran plaza nocturna, un poco menos masificada. Terrazas más tranquilas, bares con música en directo y acceso andando a los clubs principales. Si Rembrandtplein está a tope, aquí siempre hay sitio y el ambiente es igual de bueno.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80", maps: "https://maps.google.com/?q=Leidseplein,+Amsterdam" },
+      { name: "Sugarfactory & Melkweg", desc: "Los dos clubs más interesantes, a dos minutos de Leidseplein. Programan electrónica, indie, rap y conciertos. La clave es mirar su web antes de salir — hay eventos de entrada asequible especialmente entre semana. No te presentes sin haber mirado.", badge: "paid", badgeLabel: "Entrada variable", time: "Desde medianoche", img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80", maps: "https://maps.google.com/?q=Melkweg,+Amsterdam" }
     ]
   },
   rotterdam: {
     name: "Rotterdam", flag: "🇳🇱", country: "Países Bajos",
     ver: [
-      {
-        name: "Markthal",
-        desc: "Un mercado cubierto con un mural de 11.000 m² pintado en el techo en forma de arco. Dentro hay puestos de comida de todo el mundo, una cervecería artesanal y un ambiente muy animado. La arquitectura ya merece la visita antes de probar nada — es de esas cosas que no parecen reales hasta que estás dentro.",
-        badge: "free", badgeLabel: "Gratis entrar", time: "Mediodía",
-        img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80",
-        maps: "https://maps.google.com/?q=Markthal,+Rotterdam"
-      },
-      {
-        name: "Depósito Boijmans Van Beuningen",
-        desc: "Un edificio con forma de cuenco gigante completamente cubierto de espejos que refleja todo lo que tiene alrededor. Es visualmente una locura y las fotos que salen desde fuera son de las más impactantes de todo el viaje. Está justo al lado del parque Museumpark y no requiere ningún esfuerzo especial llegar.",
-        badge: "free", badgeLabel: "Gratis (exterior)", time: "Cualquier hora",
-        img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80",
-        maps: "https://maps.google.com/?q=Depot+Boijmans+Van+Beuningen,+Rotterdam"
-      },
-      {
-        name: "Puente Erasmus",
-        desc: "El símbolo de Rotterdam. Un puente colgante enorme y elegante sobre el Maas que conecta el centro con el barrio portuario. Crúzalo a pie — las vistas al skyline desde el centro son brutales y te da una idea de por qué Rotterdam es la ciudad más moderna y distinta de los Países Bajos.",
-        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1584811644165-33db3b6d3a0c?w=800&q=80",
-        maps: "https://maps.google.com/?q=Erasmus+Bridge,+Rotterdam"
-      },
-      {
-        name: "Casas Cúbicas",
-        desc: "Casas normales inclinadas 45 grados sobre un puente peatonal, como si alguien las hubiera torcido de golpe. Desde fuera ya parecen imposibles, pero hay una abierta como museo que puedes visitar por muy poco para ver cómo vive alguien dentro. Una de esas cosas que no tienen explicación hasta que las ves.",
-        badge: "partial", badgeLabel: "Entrada mínima", time: "Mañana",
-        img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80",
-        maps: "https://maps.google.com/?q=Cube+Houses,+Rotterdam"
-      },
-      {
-        name: "Puerto — Kop van Zuid",
-        desc: "El antiguo barrio portuario reconvertido en zona de arquitectura contemporánea. Rascacielos, grúas históricas de hierro, el Puente Erasmus al fondo y el mejor skyline de los Países Bajos. Muy diferente al centro histórico de Ámsterdam — Rotterdam es así, sin complejos.",
-        badge: "free", badgeLabel: "Gratis", time: "Cualquier hora",
-        img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
-        maps: "https://maps.google.com/?q=Kop+van+Zuid,+Rotterdam"
-      }
+      { name: "Markthal", desc: "Un mercado cubierto con un mural de 11.000 m² pintado en el techo en forma de arco. Dentro hay puestos de comida de todo el mundo y una cervecería artesanal. La arquitectura ya merece la visita antes de probar nada — es de esas cosas que no parecen reales hasta que estás dentro.", badge: "free", badgeLabel: "Gratis entrar", time: "Mediodía", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", maps: "https://maps.google.com/?q=Markthal,+Rotterdam" },
+      { name: "Depósito Boijmans Van Beuningen", desc: "Un edificio con forma de cuenco gigante completamente cubierto de espejos que refleja todo lo que tiene alrededor. Es visualmente una locura y las fotos que salen desde fuera son de las más impactantes del viaje. Está en el Museumpark y no requiere ningún esfuerzo llegar.", badge: "free", badgeLabel: "Gratis (exterior)", time: "Cualquier hora", img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80", maps: "https://maps.google.com/?q=Depot+Boijmans+Van+Beuningen,+Rotterdam" },
+      { name: "Puente Erasmus", desc: "El símbolo de Rotterdam. Un puente colgante enorme y elegante sobre el Maas. Crúzalo a pie — las vistas al skyline desde el centro son brutales y te da una idea de por qué Rotterdam es la ciudad más moderna y distinta de los Países Bajos.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1584811644165-33db3b6d3a0c?w=800&q=80", maps: "https://maps.google.com/?q=Erasmus+Bridge,+Rotterdam" },
+      { name: "Casas Cúbicas", desc: "Casas normales inclinadas 45 grados sobre un puente peatonal. Desde fuera ya parecen imposibles, pero hay una abierta como museo para ver cómo vive alguien dentro. Una de esas cosas que no tienen explicación hasta que las ves.", badge: "partial", badgeLabel: "Entrada mínima", time: "Mañana", img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80", maps: "https://maps.google.com/?q=Cube+Houses,+Rotterdam" },
+      { name: "Puerto — Kop van Zuid", desc: "El antiguo barrio portuario reconvertido en zona de arquitectura contemporánea. Rascacielos, grúas históricas de hierro y el mejor skyline de los Países Bajos. Muy diferente al centro histórico de Ámsterdam — Rotterdam es así, sin complejos.", badge: "free", badgeLabel: "Gratis", time: "Cualquier hora", img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80", maps: "https://maps.google.com/?q=Kop+van+Zuid,+Rotterdam" }
     ],
     salir: [
-      {
-        name: "Witte de Withstraat",
-        desc: "La calle más viva de Rotterdam cuando oscurece. Bares, restaurantes, galerías de arte y gente de todo tipo en un ambiente muy joven y multicultural. Sin dress code, sin pretensiones y con precios mucho más razonables que Ámsterdam. El punto de partida obligatorio de cualquier noche en la ciudad.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h",
-        img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
-        maps: "https://maps.google.com/?q=Witte+de+Withstraat,+Rotterdam"
-      },
-      {
-        name: "Kaapse Brouwers",
-        desc: "Cervecería artesanal dentro del Fenix Food Factory, el mercado de segunda mano más grande de Holanda, junto al agua. Ambiente industrial con vistas al puerto, cervezas locales que no encuentras en ningún bar normal y mucho espacio en terrazas. El tipo de sitio que recuerdas cuando llegas a casa.",
-        badge: "free", badgeLabel: "Sin entrada", time: "Tarde-noche",
-        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-        maps: "https://maps.google.com/?q=Kaapse+Brouwers,+Rotterdam"
-      },
-      {
-        name: "BIRD",
-        desc: "Sala de conciertos y club con programación de jazz, electrónica y directo muy variada. La entrada suele ser asequible y el ambiente es bastante distinto a los clubs de turistas. Si hay algo esa noche cuando llegues, apúntalo en el radar antes de salir.",
-        badge: "paid", badgeLabel: "Entrada asequible", time: "A partir de las 23h",
-        img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80",
-        maps: "https://maps.google.com/?q=BIRD+Rotterdam"
-      }
+      { name: "Witte de Withstraat", desc: "La calle más viva de Rotterdam cuando oscurece. Bares, restaurantes y galerías de arte en un ambiente muy joven y multicultural. Sin dress code, sin pretensiones y con precios mucho más razonables que Ámsterdam. El punto de partida obligatorio de cualquier noche.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h", img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80", maps: "https://maps.google.com/?q=Witte+de+Withstraat,+Rotterdam" },
+      { name: "Kaapse Brouwers", desc: "Cervecería artesanal dentro del Fenix Food Factory junto al agua. Ambiente industrial con vistas al puerto, cervezas locales que no encuentras en ningún bar normal y mucho espacio en terrazas. El tipo de sitio que recuerdas cuando llegas a casa.", badge: "free", badgeLabel: "Sin entrada", time: "Tarde-noche", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", maps: "https://maps.google.com/?q=Kaapse+Brouwers,+Rotterdam" },
+      { name: "BIRD", desc: "Sala de conciertos y club con programación de jazz, electrónica y directo. La entrada suele ser asequible y el ambiente es bastante distinto a los clubs de turistas. Si hay algo esa noche cuando llegues, apúntalo en el radar.", badge: "paid", badgeLabel: "Entrada asequible", time: "A partir de las 23h", img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80", maps: "https://maps.google.com/?q=BIRD+Rotterdam" }
     ]
   },
   berlin: {
     name: "Berlín", flag: "🇩🇪", country: "Alemania",
     ver: [
-      {
-        name: "Puerta de Brandeburgo",
-        desc: "El símbolo más reconocible de Alemania y el punto donde durante décadas no podías pasar al otro lado. Estar delante en persona tiene un peso distinto al de las fotos — la escala es enorme y la historia que carga es de las más densas de Europa. Pásate a cualquier hora, no necesita planificación.",
-        badge: "free", badgeLabel: "Gratis", time: "Cualquier hora",
-        img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80",
-        maps: "https://maps.google.com/?q=Brandenburg+Gate,+Berlin"
-      },
-      {
-        name: "Reichstag",
-        desc: "La cúpula de cristal del parlamento alemán tiene unas vistas sobre Berlín que son difícilmente superables. Es gratis entrar pero hay que reservar online con días de antelación — no te olvides antes de salir de casa. Al atardecer con la luz cayendo sobre la ciudad merece esperar el turno.",
-        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=80",
-        maps: "https://maps.google.com/?q=Reichstag,+Berlin"
-      },
-      {
-        name: "East Side Gallery",
-        desc: "El tramo más largo del Muro de Berlín que todavía está en pie, convertido en galería de arte al aire libre. Más de cien murales pintados directamente sobre el hormigón original. Hay algo muy raro en caminar por delante de algo que dividió una ciudad entera durante 28 años. Por la mañana está casi vacío.",
-        badge: "free", badgeLabel: "Gratis", time: "Por la mañana",
-        img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80",
-        maps: "https://maps.google.com/?q=East+Side+Gallery,+Berlin"
-      },
-      {
-        name: "Mauerpark — domingos",
-        desc: "Solo si caéis un domingo en Berlín: id al Mauerpark. Por la mañana hay mercadillo enorme con ropa de segunda mano, discos y cachivaches raros. Por la tarde se monta un karaoke al aire libre espontáneo donde cualquiera sube y canta delante de cientos de personas. El ambiente es joven, gratuito y muy berlinés. Uno de los mejores planes del viaje.",
-        badge: "free", badgeLabel: "Gratis", time: "Domingo todo el día",
-        img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80",
-        maps: "https://maps.google.com/?q=Mauerpark,+Berlin"
-      },
-      {
-        name: "Klunkerkranich",
-        desc: "Una terraza montada encima de un parking en Neukölln con vistas por encima de los tejados de Berlín. La entrada cuesta muy poco, el ambiente es muy local y al atardecer con una cerveza en la mano es de las mejores sorpresas de la ciudad. No lo busques en ninguna guía turística — lo conocen los berlineses.",
-        badge: "partial", badgeLabel: "Entrada mínima", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80",
-        maps: "https://maps.google.com/?q=Klunkerkranich,+Berlin"
-      }
+      { name: "Puerta de Brandeburgo", desc: "El símbolo más reconocible de Alemania y el punto donde durante décadas no podías pasar al otro lado. Estar delante en persona tiene un peso distinto al de las fotos — la escala es enorme y la historia que carga es de las más densas de Europa.", badge: "free", badgeLabel: "Gratis", time: "Cualquier hora", img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80", maps: "https://maps.google.com/?q=Brandenburg+Gate,+Berlin" },
+      { name: "Reichstag", desc: "La cúpula de cristal del parlamento tiene unas vistas sobre Berlín difícilmente superables. Gratis, pero hay que reservar online con días de antelación. Al atardecer con la luz cayendo sobre la ciudad merece esperar el turno.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=80", maps: "https://maps.google.com/?q=Reichstag,+Berlin" },
+      { name: "East Side Gallery", desc: "El tramo más largo del Muro que queda en pie, convertido en galería de arte al aire libre. Más de cien murales pintados sobre el hormigón original. Hay algo muy raro en caminar por delante de algo que dividió una ciudad entera durante 28 años. Por la mañana está casi vacío.", badge: "free", badgeLabel: "Gratis", time: "Por la mañana", img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80", maps: "https://maps.google.com/?q=East+Side+Gallery,+Berlin" },
+      { name: "Mauerpark — domingos", desc: "Solo si caéis un domingo: id al Mauerpark. Por la mañana hay mercadillo enorme con ropa de segunda mano y discos. Por la tarde se monta un karaoke al aire libre espontáneo donde cualquiera sube y canta delante de cientos de personas. El ambiente es joven, gratuito y muy berlinés.", badge: "free", badgeLabel: "Gratis", time: "Domingo todo el día", img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80", maps: "https://maps.google.com/?q=Mauerpark,+Berlin" },
+      { name: "Klunkerkranich", desc: "Una terraza montada encima de un parking en Neukölln con vistas por encima de los tejados de Berlín. La entrada cuesta muy poco y al atardecer con una cerveza en la mano es de las mejores sorpresas de la ciudad. No lo busques en ninguna guía turística.", badge: "partial", badgeLabel: "Entrada mínima", time: "Atardecer", img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80", maps: "https://maps.google.com/?q=Klunkerkranich,+Berlin" }
     ],
     salir: [
-      {
-        name: "Späti Culture",
-        desc: "Compras una cerveza en cualquier tienda de conveniencia (los Spätis, que abren toda la noche) y te la bebes en la calle. No es un plan de emergencia para ahorrar — es literalmente lo que hacen los berlineses. Busca un canal, un puente o una plaza con gente y ya tienes la mejor noche de la ciudad sin gastarte nada.",
-        badge: "free", badgeLabel: "Casi gratis", time: "Toda la noche",
-        img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80",
-        maps: "https://maps.google.com/?q=Kreuzberg,+Berlin"
-      },
-      {
-        name: "RAW-Gelände",
-        desc: "Un antiguo recinto industrial en Friedrichshain reconvertido en zona de ocio alternativa. Paredes cubiertas de grafitis, un rocódromo, bares al aire libre, discotecas pequeñas con música electrónica y nada de puertas de lista larga. El ambiente es muy berlinés pero sin el filtro de entrada estricto de los clubs famosos. Perfecto para una noche sin complicaciones.",
-        badge: "free", badgeLabel: "Sin entrada (consumiciones)", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80",
-        maps: "https://maps.google.com/?q=RAW+Gelände,+Berlin"
-      },
-      {
-        name: "Kreuzberg",
-        desc: "El barrio más alternativo de Berlín con decenas de bares sin dress code, sin etiqueta y sin precios inflados. La mayoría no cobran entrada. El ambiente es muy mezclado: estudiantes, artistas, locales de toda la vida. No hay un sitio concreto al que ir — simplemente camina y entra al que te llame.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80",
-        maps: "https://maps.google.com/?q=Kreuzberg,+Berlin"
-      },
-      {
-        name: "Neukölln",
-        desc: "El barrio más alternativo de Berlín junto a Kreuzberg, pero con menos gente de paso. Bares pequeños, eventos de artistas emergentes y precios de barrio de verdad. La misma lógica que Kreuzberg pero con menos turistas mezclados. Cuanto más tarde, mejor.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 23h",
-        img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
-        maps: "https://maps.google.com/?q=Neukölln,+Berlin"
-      }
+      { name: "Späti Culture", desc: "Compras una cerveza en cualquier Späti (tiendas de conveniencia abiertas toda la noche) y te la bebes en la calle. No es un plan de emergencia para ahorrar — es lo que hacen los berlineses. Busca un canal o una plaza con gente y ya tienes la mejor noche de la ciudad sin gastarte nada.", badge: "free", badgeLabel: "Casi gratis", time: "Toda la noche", img: "https://images.unsplash.com/photo-1544085311-11a028465b03?w=800&q=80", maps: "https://maps.google.com/?q=Kreuzberg,+Berlin" },
+      { name: "RAW-Gelände", desc: "Antiguo recinto industrial en Friedrichshain reconvertido en zona de ocio alternativa. Paredes de grafitis, rocódromo, bares al aire libre y discotecas pequeñas con electrónica sin el filtro de entrada estricto de los clubs famosos. Perfecto para una noche sin complicaciones.", badge: "free", badgeLabel: "Sin entrada (consumiciones)", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80", maps: "https://maps.google.com/?q=RAW+Gelände,+Berlin" },
+      { name: "Kreuzberg", desc: "El barrio más alternativo de Berlín con decenas de bares sin dress code, sin etiqueta y sin precios inflados. La mayoría no cobran entrada. Ambiente muy mezclado: estudiantes, artistas, locales de toda la vida. No hay un sitio concreto — simplemente camina y entra al que te llame.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800&q=80", maps: "https://maps.google.com/?q=Kreuzberg,+Berlin" },
+      { name: "Neukölln", desc: "El barrio más alternativo junto a Kreuzberg, pero con menos gente de paso. Bares pequeños, eventos de artistas emergentes y precios de barrio de verdad. La misma lógica que Kreuzberg pero con menos turistas mezclados. Cuanto más tarde, mejor.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 23h", img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80", maps: "https://maps.google.com/?q=Neukölln,+Berlin" }
     ]
   },
   praga: {
     name: "Praga", flag: "🇨🇿", country: "República Checa",
     ver: [
-      {
-        name: "Puente de Carlos",
-        desc: "Un puente medieval con estatuas de santos en los laterales y vistas al castillo y al río Moldava. Al mediodía está colapsado de turistas. Al amanecer, antes de las 7h, está prácticamente vacío y es una de esas experiencias que luego te alegras de haber madrugado. Ponle el despertador.",
-        badge: "free", badgeLabel: "Gratis", time: "Amanecer",
-        img: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
-        maps: "https://maps.google.com/?q=Charles+Bridge,+Prague"
-      },
-      {
-        name: "Castillo de Praga",
-        desc: "El complejo histórico más grande del mundo según cómo se mida. Dentro hay una catedral gótica brutal, palacios, callejuelas medievales y vistas panorámicas sobre toda la ciudad. Entrar a los patios exteriores es gratis — para las partes interiores hay que pagar, pero lo exterior ya justifica la subida.",
-        badge: "partial", badgeLabel: "Parcialmente gratis", time: "Por la mañana",
-        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
-        maps: "https://maps.google.com/?q=Prague+Castle"
-      },
-      {
-        name: "Parque Letná",
-        desc: "Un mirador elevado sobre el río Moldava con vistas a todos los puentes de Praga alineados. El parque tiene un beer garden enorme bajo los árboles donde los locales pasan las tardes con cerveza baratísima. Las vistas al atardecer desde el borde del mirador son de las mejores del viaje entero. No lo pasa nadie por alto que haya estado en Praga.",
-        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80",
-        maps: "https://maps.google.com/?q=Letna+Park,+Prague"
-      },
-      {
-        name: "Riegrovy Sady",
-        desc: "Parque elevado en el barrio de Vinohrady con una terraza de cerveza al aire libre y vistas a la ciudad. Menos conocido que Letná pero con el mismo ambiente: locales, césped, cervezas a menos de 2€ y el sol cayendo detrás de los tejados de Praga. El plan de tarde más tranquilo de la ciudad.",
-        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80",
-        maps: "https://maps.google.com/?q=Riegrovy+sady,+Prague"
-      }
+      { name: "Puente de Carlos", desc: "Un puente medieval con estatuas de santos en los laterales y vistas al castillo y al Moldava. Al mediodía está colapsado de turistas. Al amanecer, antes de las 7h, está prácticamente vacío y es una de esas experiencias que luego te alegras de haber madrugado. Ponle el despertador.", badge: "free", badgeLabel: "Gratis", time: "Amanecer", img: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80", maps: "https://maps.google.com/?q=Charles+Bridge,+Prague" },
+      { name: "Castillo de Praga", desc: "El complejo histórico más grande del mundo según cómo se mida. Dentro hay una catedral gótica brutal, palacios, callejuelas medievales y vistas panorámicas sobre toda la ciudad. Entrar a los patios exteriores es gratis — para el interior hay que pagar, pero lo exterior ya justifica la subida.", badge: "partial", badgeLabel: "Parcialmente gratis", time: "Por la mañana", img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80", maps: "https://maps.google.com/?q=Prague+Castle" },
+      { name: "Parque Letná", desc: "Mirador elevado sobre el río Moldava con vistas a todos los puentes de Praga alineados. Tiene un beer garden enorme bajo los árboles donde los locales pasan las tardes con cerveza baratísima. Las vistas al atardecer son de las mejores del viaje entero.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80", maps: "https://maps.google.com/?q=Letna+Park,+Prague" },
+      { name: "Riegrovy Sady", desc: "Parque elevado en Vinohrady con terraza de cerveza al aire libre y vistas a la ciudad. Menos conocido que Letná pero con el mismo ambiente: locales, césped, cervezas a menos de 2€ y el sol cayendo detrás de los tejados de Praga.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80", maps: "https://maps.google.com/?q=Riegrovy+sady,+Prague" }
     ],
     salir: [
-      {
-        name: "Žižkov",
-        desc: "El barrio con más bares por metro cuadrado de Europa — y no es un mito, hay estudios que lo respaldan. Ambiente 100% local y estudiantil, precios ridículamente baratos y cero turistización. Nada está a más de cinco minutos andando de lo anterior. Si quieres conocer cómo sale de verdad la gente de Praga, es aquí.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h",
-        img: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
-        maps: "https://maps.google.com/?q=Žižkov,+Prague"
-      },
-      {
-        name: "Lucerna Music Bar",
-        desc: "Sala histórica en el centro con noches temáticas de 90s, pop, indie y rock que suelen ser muy baratas y muy divertidas. El local tiene su propia historia y el ambiente que se monta en esas noches es difícil de explicar. Mira la programación cuando llegues — si hay algo esa noche, ve sin pensarlo.",
-        badge: "paid", badgeLabel: "Entrada asequible", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
-        maps: "https://maps.google.com/?q=Lucerna+Music+Bar,+Prague"
-      }
+      { name: "Žižkov", desc: "El barrio con más bares por metro cuadrado de Europa — y no es un mito. Ambiente 100% local y estudiantil, precios ridículamente baratos y cero turistización. Nada está a más de cinco minutos andando. Si quieres conocer cómo sale de verdad la gente de Praga, es aquí.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 21h", img: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80", maps: "https://maps.google.com/?q=Žižkov,+Prague" },
+      { name: "Lucerna Music Bar", desc: "Sala histórica con noches temáticas de 90s, pop, indie y rock que suelen ser muy baratas y muy divertidas. El local tiene su propia historia y el ambiente que se monta es difícil de explicar. Mira la programación cuando llegues — si hay algo esa noche, ve sin pensarlo.", badge: "paid", badgeLabel: "Entrada asequible", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80", maps: "https://maps.google.com/?q=Lucerna+Music+Bar,+Prague" }
     ]
   },
   budapest: {
     name: "Budapest", flag: "🇭🇺", country: "Hungría",
     ver: [
-      {
-        name: "Szimpla Kert",
-        desc: "El primer Ruin Bar del mundo y todavía el mejor. Un edificio residencial del siglo XIX en diferentes estados de abandono convertido en un laberinto de salas, patios y terrazas. Cada habitación tiene su propia decoración imposible. Es una de esas cosas que no tienen equivalente en ningún otro sitio de Europa.",
-        badge: "free", badgeLabel: "Gratis (pagas consumición)", time: "Noche",
-        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
-        maps: "https://maps.google.com/?q=Szimpla+Kert,+Budapest"
-      },
-      {
-        name: "Bastión de los Pescadores",
-        desc: "Una estructura neogótica en lo alto del castillo que parece sacada de Juego de Tronos o de un cuento de fantasía medieval. Las torres, las escaleras y los arcos son visualmente brutales, y las vistas desde arriba — el Danubio, el Parlamento, toda la ciudad — son de las más espectaculares del viaje. A primera hora de la mañana está casi vacío.",
-        badge: "partial", badgeLabel: "Parcialmente gratis", time: "Amanecer o atardecer",
-        img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80",
-        maps: "https://maps.google.com/?q=Fisherman%27s+Bastion,+Budapest"
-      },
-      {
-        name: "Baños Széchenyi",
-        desc: "Termas neobarrocas construidas en 1913 con piscinas exteriores de agua caliente en medio del parque. Por la mañana el ambiente es tranquilo y relajado. Por la noche hay eventos de fiesta en las piscinas. Una experiencia que no existe igual en ningún otro sitio de Europa y que en julio, con calor, tiene un punto surreal muy bueno.",
-        badge: "paid", badgeLabel: "De pago", time: "Mañana o noche",
-        img: "https://images.unsplash.com/photo-1549154651-e76390a20a17?w=800&q=80",
-        maps: "https://maps.google.com/?q=Szechenyi+Baths,+Budapest"
-      },
-      {
-        name: "Parlamento iluminado",
-        desc: "Uno de los edificios más impresionantes de Europa, y de noche iluminado desde la ribera del Danubio es de otro nivel. No hace falta entrar ni pagar nada — basta con acercarse al paseo del río Pest y mirarlo desde enfrente. Con el reflejo en el agua a última hora de la noche es una de las imágenes del viaje.",
-        badge: "free", badgeLabel: "Gratis (exterior)", time: "Noche",
-        img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80",
-        maps: "https://maps.google.com/?q=Hungarian+Parliament,+Budapest"
-      }
+      { name: "Szimpla Kert", desc: "El primer Ruin Bar del mundo y todavía el mejor. Un edificio residencial del siglo XIX en diferentes estados de abandono convertido en un laberinto de salas, patios y terrazas. Cada habitación tiene su propia decoración imposible. No tiene equivalente en ningún otro sitio de Europa.", badge: "free", badgeLabel: "Gratis (pagas consumición)", time: "Noche", img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80", maps: "https://maps.google.com/?q=Szimpla+Kert,+Budapest" },
+      { name: "Bastión de los Pescadores", desc: "Una estructura neogótica en lo alto del castillo que parece sacada de Juego de Tronos. Las torres, las escaleras y los arcos son visualmente brutales, y las vistas — el Danubio, el Parlamento, toda la ciudad — son de las más espectaculares del viaje. A primera hora de la mañana está casi vacío.", badge: "partial", badgeLabel: "Parcialmente gratis", time: "Amanecer o atardecer", img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80", maps: "https://maps.google.com/?q=Fisherman%27s+Bastion,+Budapest" },
+      { name: "Baños Széchenyi", desc: "Termas neobarrocas de 1913 con piscinas exteriores de agua caliente en medio del parque. Por la mañana el ambiente es tranquilo. Por la noche hay eventos de fiesta en las piscinas. Una experiencia que no existe igual en ningún otro sitio de Europa.", badge: "paid", badgeLabel: "De pago", time: "Mañana o noche", img: "https://images.unsplash.com/photo-1549154651-e76390a20a17?w=800&q=80", maps: "https://maps.google.com/?q=Szechenyi+Baths,+Budapest" },
+      { name: "Parlamento iluminado", desc: "Uno de los edificios más impresionantes de Europa. De noche iluminado desde la ribera del Danubio es de otro nivel. No hace falta entrar — basta con acercarse al paseo del río y mirarlo desde enfrente. Con el reflejo en el agua a última hora es una de las imágenes del viaje.", badge: "free", badgeLabel: "Gratis (exterior)", time: "Noche", img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80", maps: "https://maps.google.com/?q=Hungarian+Parliament,+Budapest" }
     ],
     salir: [
-      {
-        name: "Distrito VII — Ruin Bars",
-        desc: "El epicentro de la noche en Budapest. Varios edificios de principios del siglo XX en diferentes estados de abandono reconvertidos en bares de varios pisos, con patios, terrazas y salas de música. El ambiente es joven, cosmopolita y bastante único. Empieza en Szimpla Kert y deja que la noche lleve al resto — hay bares por todas partes.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80",
-        maps: "https://maps.google.com/?q=Jewish+Quarter+Budapest+nightlife"
-      }
+      { name: "Distrito VII — Ruin Bars", desc: "El epicentro de la noche en Budapest. Varios edificios de principios del siglo XX en diferentes estados de abandono reconvertidos en bares de varios pisos, con patios, terrazas y salas de música. Ambiente joven, cosmopolita y bastante único. Empieza en Szimpla y deja que la noche lleve al resto.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80", maps: "https://maps.google.com/?q=Jewish+Quarter+Budapest+nightlife" }
     ]
   },
   split: {
     name: "Split", flag: "🇭🇷", country: "Croacia",
     ver: [
-      {
-        name: "Palacio de Diocleciano",
-        desc: "Un palacio romano del siglo IV donde hoy vive gente de verdad. Literalmente: dentro de las murallas hay bares, tiendas, apartamentos y restaurantes. Caminar por los callejones de piedra de 1.700 años con gente tendiendo ropa en las ventanas es algo que no tiene equivalente en ningún otro sitio del mundo. Y es gratis entrar.",
-        badge: "free", badgeLabel: "Gratis (exterior)", time: "Cualquier hora",
-        img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80",
-        maps: "https://maps.google.com/?q=Diocletian+Palace,+Split"
-      },
-      {
-        name: "Riva — paseo marítimo",
-        desc: "El paseo frente al Adriático donde toda la ciudad acaba pasando en algún momento del día. Cafés con terraza, palmeras, barcos en el puerto y el mar delante. Es el sitio donde los locales se sientan a no hacer nada y eso lo convierte en el mejor plan de media tarde después de visitar el Palacio.",
-        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",
-        maps: "https://maps.google.com/?q=Riva+promenade,+Split"
-      },
-      {
-        name: "Marjan — colina del parque",
-        desc: "Parque forestal encima de la ciudad con vistas panorámicas al Adriático y a las islas de enfrente. Subes en unos 20 minutos a pie desde el centro. Al atardecer con la luz sobre el mar y las islas en el horizonte es uno de esos momentos del viaje que se recuerdan. Lleva agua — en julio hace calor.",
-        badge: "free", badgeLabel: "Gratis", time: "Atardecer",
-        img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80",
-        maps: "https://maps.google.com/?q=Marjan+Hill,+Split"
-      },
-      {
-        name: "Playa Bačvice",
-        desc: "La playa más famosa de Split, a 10 minutos andando del centro histórico. Arena, aguas del Adriático de un azul que parece mentira y el picigin — un deporte local absurdo que consiste en no dejar que una pelota toque el agua en aguas poco profundas. Muy divertido de ver y bastante difícil de jugar.",
-        badge: "free", badgeLabel: "Gratis", time: "Mañana",
-        img: "https://images.unsplash.com/photo-1549154651-e76390a20a17?w=800&q=80",
-        maps: "https://maps.google.com/?q=Bacvice+beach,+Split"
-      }
+      { name: "Palacio de Diocleciano", desc: "Un palacio romano del siglo IV donde hoy vive gente de verdad. Dentro de las murallas hay bares, tiendas, apartamentos y restaurantes. Caminar por los callejones de piedra de 1.700 años con gente tendiendo ropa en las ventanas es algo que no tiene equivalente en ningún otro sitio del mundo.", badge: "free", badgeLabel: "Gratis (exterior)", time: "Cualquier hora", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", maps: "https://maps.google.com/?q=Diocletian+Palace,+Split" },
+      { name: "Riva — paseo marítimo", desc: "El paseo frente al Adriático donde toda la ciudad acaba pasando en algún momento del día. Cafés con terraza, palmeras, barcos en el puerto y el mar delante. Es el sitio donde los locales se sientan a no hacer nada y eso lo convierte en el mejor plan de media tarde.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80", maps: "https://maps.google.com/?q=Riva+promenade,+Split" },
+      { name: "Marjan — colina del parque", desc: "Parque forestal encima de la ciudad con vistas panorámicas al Adriático y a las islas. Subes en 20 minutos a pie desde el centro. Al atardecer con la luz sobre el mar y las islas en el horizonte es uno de esos momentos del viaje que se recuerdan. Lleva agua — en julio hace calor.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=800&q=80", maps: "https://maps.google.com/?q=Marjan+Hill,+Split" },
+      { name: "Playa Bačvice", desc: "La playa más famosa de Split, a 10 minutos andando del centro. Arena, aguas del Adriático de un azul que parece mentira y el picigin — un deporte local absurdo que consiste en no dejar que una pelota toque el agua. Muy divertido de ver y bastante difícil de jugar.", badge: "free", badgeLabel: "Gratis", time: "Mañana", img: "https://images.unsplash.com/photo-1549154651-e76390a20a17?w=800&q=80", maps: "https://maps.google.com/?q=Bacvice+beach,+Split" }
     ],
     salir: [
-      {
-        name: "Dentro del Palacio — callejuelas",
-        desc: "La noche en Split empieza literalmente dentro de un palacio romano del siglo IV. Los callejones entre murallas de piedra de 1.700 años tienen bares a pie de calle con mesas fuera, música y gente de todo el mundo. Es difícil de explicar lo raro y lo bueno que es salir de noche en un sitio así. No hay otra ciudad que lo tenga.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80",
-        maps: "https://maps.google.com/?q=Diocletian+Palace+nightlife,+Split"
-      },
-      {
-        name: "Bačvice Beach Bar",
-        desc: "Club y terraza junto a la playa más famosa de Split. Música hasta tarde, ambiente muy joven y el Adriático a dos metros. En julio está a tope de gente. Si queréis sitio decente, llega antes de medianoche — después de esa hora hay cola y puede haber entrada.",
-        badge: "paid", badgeLabel: "Entrada variable", time: "A partir de las 23h",
-        img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80",
-        maps: "https://maps.google.com/?q=Bacvice+club,+Split"
-      },
-      {
-        name: "Zrće — isla Pag ⚠️",
-        desc: "OJO: Zrće es el Ibiza croata y es una pasada, pero NO es una excursión de tarde. La isla de Pag está a 4-5 horas de Split en bus+ferry y está pensada para quedarse varios días de festivales. Si solo tenéis 2 días en Split, quédaos con el Palacio y Bačvice. Zrće es para otro viaje con más tiempo.",
-        badge: "paid", badgeLabel: "Excursión de varios días", time: "Solo si tenéis tiempo extra",
-        img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
-        maps: "https://maps.google.com/?q=Zrce+beach,+Pag,+Croatia",
-        warn: true
-      }
+      { name: "Dentro del Palacio — callejuelas", desc: "La noche en Split empieza dentro de un palacio romano del siglo IV. Los callejones entre murallas de piedra de 1.700 años tienen bares a pie de calle con mesas fuera, música y gente de todo el mundo. No hay otra ciudad que lo tenga.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80", maps: "https://maps.google.com/?q=Diocletian+Palace+nightlife,+Split" },
+      { name: "Bačvice Beach Bar", desc: "Club y terraza junto a la playa más famosa de Split. Música hasta tarde, ambiente muy joven y el Adriático a dos metros. En julio está a tope. Si queréis sitio decente, llega antes de medianoche.", badge: "paid", badgeLabel: "Entrada variable", time: "A partir de las 23h", img: "https://images.unsplash.com/photo-1558292842-d15571d98e1a?w=800&q=80", maps: "https://maps.google.com/?q=Bacvice+club,+Split" },
+      { name: "Zrće — isla Pag ⚠️", desc: "OJO: Zrće es el Ibiza croata y es una pasada, pero NO es una excursión de tarde. La isla de Pag está a 4-5 horas de Split en bus+ferry y está pensada para quedarse varios días de festivales. Si solo tenéis 2 días en Split, quédaos con el Palacio y Bačvice. Zrće es para otro viaje.", badge: "paid", badgeLabel: "Excursión de varios días", time: "Solo si tenéis tiempo extra", img: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80", maps: "https://maps.google.com/?q=Zrce+beach,+Pag,+Croatia", warn: true }
     ]
   },
   munich: {
     name: "Múnich", flag: "🇩🇪", country: "Alemania",
     ver: [
-      {
-        name: "Jardín Inglés + Eisbach",
-        desc: "El parque urbano más grande de Europa — más grande que el Central Park de Nueva York — con un río que atraviesa y donde hay surfistas haciendo olas artificiales en un canal estrecho. La imagen de tipos haciendo surf en pleno centro de Múnich, a metros de coches y tranvías, es tan absurda y tan buena que justifica el paseo.",
-        badge: "free", badgeLabel: "Gratis", time: "Mediodía",
-        img: "https://images.unsplash.com/photo-1573676048621-0e103c0e02e4?w=800&q=80",
-        maps: "https://maps.google.com/?q=Eisbach+surfers,+Munich"
-      },
-      {
-        name: "Olympiapark",
-        desc: "El recinto construido para los JJ.OO. de 1972 con una arquitectura de tejados de cristal colgantes que para su época era ciencia ficción. Las vistas desde la torre olímpica son brutales y el parque en verano tiene conciertos, eventos y mucho espacio verde. Muy poco turístico para lo bueno que es.",
-        badge: "partial", badgeLabel: "Torre de pago / parque gratis", time: "Tarde",
-        img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
-        maps: "https://maps.google.com/?q=Olympiapark,+Munich"
-      },
-      {
-        name: "Viktualienmarkt",
-        desc: "El mercado tradicional bávaro más antiguo de Múnich, en pleno centro, con una cervecería al aire libre en medio. Puestos de queso, embutido, fruta y especialidades locales rodeando mesas con bancos donde la gente come con una Maß de litro en la mano. La experiencia más auténtica de Múnich sin acercarse al Oktoberfest.",
-        badge: "free", badgeLabel: "Gratis el paseo", time: "Mediodía",
-        img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
-        maps: "https://maps.google.com/?q=Viktualienmarkt,+Munich"
-      }
+      { name: "Jardín Inglés + Eisbach", desc: "El parque urbano más grande de Europa con un río donde hay surfistas haciendo olas artificiales en un canal estrecho. La imagen de tipos haciendo surf en pleno centro de Múnich, a metros de coches y tranvías, es tan absurda y tan buena que justifica el paseo.", badge: "free", badgeLabel: "Gratis", time: "Mediodía", img: "https://images.unsplash.com/photo-1573676048621-0e103c0e02e4?w=800&q=80", maps: "https://maps.google.com/?q=Eisbach+surfers,+Munich" },
+      { name: "Olympiapark", desc: "El recinto de los JJ.OO. de 1972 con una arquitectura de tejados de cristal colgantes que para su época era ciencia ficción. Las vistas desde la torre son brutales y el parque en verano tiene conciertos y eventos. Muy poco turístico para lo bueno que es.", badge: "partial", badgeLabel: "Torre de pago / parque gratis", time: "Tarde", img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80", maps: "https://maps.google.com/?q=Olympiapark,+Munich" },
+      { name: "Viktualienmarkt", desc: "El mercado tradicional bávaro más antiguo de Múnich, en pleno centro, con una cervecería al aire libre. Puestos de queso, embutido y especialidades locales rodeando mesas donde la gente come con una Maß de litro en la mano. La experiencia más auténtica de Múnich sin acercarse al Oktoberfest.", badge: "free", badgeLabel: "Gratis el paseo", time: "Mediodía", img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80", maps: "https://maps.google.com/?q=Viktualienmarkt,+Munich" }
     ],
     salir: [
-      {
-        name: "Flaucher (río Isar)",
-        desc: "La orilla del río Isar al sur del centro, donde los múniqueses de toda la vida traen su propia cerveza del super, ponen música con altavoces portátiles y montan un picnic que dura hasta que oscurece. Sin entrada, sin barra mínima, sin nada. En julio con calor es el mejor plan joven de la ciudad con diferencia y apenas lo conocen los turistas.",
-        badge: "free", badgeLabel: "Casi gratis", time: "Desde la tarde",
-        img: "https://images.unsplash.com/photo-1573676048621-0e103c0e02e4?w=800&q=80",
-        maps: "https://maps.google.com/?q=Flaucher,+Munich"
-      },
-      {
-        name: "Maxvorstadt",
-        desc: "El barrio universitario de Múnich, a un par de paradas de metro del centro. Bares de copas y cervecerías con clientela mayoritariamente estudiante de la Ludwig-Maximilians Universität. Los precios son considerablemente más bajos que en el centro turístico y el ambiente es mucho más genuino que la zona de Marienplatz.",
-        badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h",
-        img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
-        maps: "https://maps.google.com/?q=Maxvorstadt,+Munich"
-      }
+      { name: "Flaucher (río Isar)", desc: "La orilla del Isar al sur del centro, donde los múniqueses traen su propia cerveza del super, ponen música con altavoces y montan un picnic que dura hasta que oscurece. Sin entrada, sin barra mínima. En julio con calor es el mejor plan joven de la ciudad y apenas lo conocen los turistas.", badge: "free", badgeLabel: "Casi gratis", time: "Desde la tarde", img: "https://images.unsplash.com/photo-1573676048621-0e103c0e02e4?w=800&q=80", maps: "https://maps.google.com/?q=Flaucher,+Munich" },
+      { name: "Maxvorstadt", desc: "El barrio universitario de Múnich. Bares de copas y cervecerías con clientela mayoritariamente estudiante de la Ludwig-Maximilians Universität. Los precios son considerablemente más bajos que en el centro turístico y el ambiente es mucho más genuino.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80", maps: "https://maps.google.com/?q=Maxvorstadt,+Munich" }
     ]
   }
 };
 
 const CITY_ORDER = ['amsterdam','rotterdam','berlin','praga','budapest','split','munich'];
+const MODES = [
+  { id: 'transporte', label: '🚆 Transporte' },
+  { id: 'alojamiento', label: '🏠 Alojamiento' },
+  { id: 'ver', label: '👁 Ver' },
+  { id: 'salir', label: '🌙 Salir' }
+];
 
 let currentCity = null;
-let currentMode = 'ver';
+let currentMode = 'transporte';
 let currentIndex = 0;
 let cards = [];
 let isDragging = false;
@@ -501,6 +415,7 @@ function buildCitySelector() {
   container.innerHTML = '';
   CITY_ORDER.forEach(id => {
     const city = DATA[id];
+    const meta = CITY_META[id];
     const btn = document.createElement('button');
     btn.className = 'cs-city-btn';
     btn.innerHTML = `
@@ -508,8 +423,8 @@ function buildCitySelector() {
       <div class="cs-city-info">
         <div class="cs-city-name">${city.name}</div>
         <div class="cs-city-country">${city.country}</div>
+        <div class="cs-city-dates">${meta.dates}</div>
       </div>
-      <div class="cs-city-count">${city.ver.length} ver · ${city.salir.length} salir</div>
       <span class="cs-arrow">›</span>
     `;
     btn.onclick = () => openCity(id);
@@ -517,15 +432,26 @@ function buildCitySelector() {
   });
 }
 
+function buildModeToggle(cityId) {
+  const toggle = document.getElementById('mode-toggle');
+  toggle.innerHTML = '';
+  MODES.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'mode-btn' + (m.id === currentMode ? ' active' : '');
+    btn.textContent = m.label;
+    btn.onclick = () => setMode(m.id);
+    toggle.appendChild(btn);
+  });
+}
+
 function openCity(id) {
   currentCity = id;
-  currentMode = 'ver';
+  currentMode = 'transporte';
   currentIndex = 0;
   document.getElementById('city-screen').style.display = 'none';
   document.getElementById('viewer').style.display = 'block';
   document.getElementById('city-title-bar').textContent = DATA[id].flag + '  ' + DATA[id].name.toUpperCase();
-  document.getElementById('btn-ver').classList.add('active');
-  document.getElementById('btn-salir').classList.remove('active');
+  buildModeToggle(id);
   renderCards();
 }
 
@@ -538,49 +464,128 @@ function goBack() {
 function setMode(mode) {
   currentMode = mode;
   currentIndex = 0;
-  document.getElementById('btn-ver').classList.toggle('active', mode === 'ver');
-  document.getElementById('btn-salir').classList.toggle('active', mode === 'salir');
+  buildModeToggle(currentCity);
   renderCards();
+}
+
+function makeTransportCard(t, cardClass) {
+  const card = document.createElement('div');
+  card.className = 'card transport-mode';
+  card.style.transform = `translateY(${cardClass * 100}%)`;
+  const transfers = t.transfers && t.transfers.length > 0
+    ? t.transfers.map(x => `<span class="transfer-chip">↻ ${x}</span>`).join('')
+    : '<span class="transfer-chip">Directo</span>';
+  card.innerHTML = `
+    <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=800&q=80')"></div>
+    <div class="card-content">
+      <div class="card-badge-row">
+        <span class="transport-tag">${t.type}</span>
+        <span class="badge-time">${t.label}</span>
+      </div>
+      <div class="card-name">${t.from.split('→')[0].trim()}<br>→ ${t.from.split('→')[1] ? t.from.split('→')[1].trim() : ''}</div>
+      <div class="transport-grid">
+        <div class="transport-row"><span class="transport-label">Horario</span><span class="transport-value"><strong>${t.date}</strong></span></div>
+        ${t.code ? `<div class="transport-row"><span class="transport-label">Código</span><span class="transport-value"><strong>${t.code}</strong></span></div>` : ''}
+        ${t.airline ? `<div class="transport-row"><span class="transport-label">Aerolínea</span><span class="transport-value">${t.airline}</span></div>` : ''}
+        <div class="transport-row"><span class="transport-label">Paradas</span><span class="transport-value">${transfers}</span></div>
+      </div>
+    </div>
+  `;
+  return card;
+}
+
+function makeAccomCard(a, idx) {
+  const card = document.createElement('div');
+  card.className = 'card accom-mode';
+  card.style.transform = `translateY(${idx * 100}%)`;
+  card.innerHTML = `
+    <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80')"></div>
+    <div class="card-content">
+      <div class="card-badge-row">
+        <span class="accom-tag">🏠 Alojamiento</span>
+      </div>
+      <div class="card-name">Dónde dormís</div>
+      <div class="accom-address">${a.address}</div>
+      <div class="accom-nights">${a.nights}</div>
+      <div class="card-actions">
+        <a href="${a.maps}" target="_blank" class="maps-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Abrir en Maps
+        </a>
+      </div>
+    </div>
+  `;
+  return card;
 }
 
 function renderCards() {
   const stack = document.getElementById('card-stack');
   stack.innerHTML = '';
   cards = [];
-  const items = DATA[currentCity][currentMode];
 
-  items.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'card' + (currentMode === 'salir' ? ' night-mode' : '');
-    card.style.transform = `translateY(${i * 100}%)`;
-
-    let badgeClass = item.badge === 'free' ? 'badge-free' : item.badge === 'paid' ? 'badge-paid' : 'badge-partial';
-
-    card.innerHTML = `
-      <div class="card-bg" style="background-image:url('${item.img}')"></div>
-      <div class="card-content">
-        <div class="card-badge-row">
-          ${item.warn ? '<span class="badge-warn">⚠️ Leer antes</span>' : ''}
-          <span class="card-badge ${badgeClass}">${item.badgeLabel}</span>
-          <span class="badge-time">⏱ ${item.time}</span>
-          ${currentMode === 'salir' ? '<span class="night-tag">🌙 SALIR</span>' : ''}
+  if (currentMode === 'transporte') {
+    const t = TRANSPORT[currentCity];
+    if (t) {
+      const items = [t.arrival, t.departure].filter(Boolean);
+      items.forEach((item, i) => {
+        const card = makeTransportCard(item, i);
+        stack.appendChild(card);
+        cards.push(card);
+      });
+    }
+  } else if (currentMode === 'alojamiento') {
+    const a = ACCOM[currentCity];
+    if (a) {
+      const card = makeAccomCard(a, 0);
+      stack.appendChild(card);
+      cards.push(card);
+    } else {
+      // No accommodation (Rotterdam)
+      const card = document.createElement('div');
+      card.className = 'card accom-mode';
+      card.style.transform = 'translateY(0%)';
+      card.innerHTML = `
+        <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80')"></div>
+        <div class="card-content">
+          <div class="card-badge-row"><span class="accom-tag">🏠 Alojamiento</span></div>
+          <div class="card-name">Sin alojamiento</div>
+          <div class="accom-address">Rotterdam es ciudad de paso. Salís de fiesta y al día siguiente cogéis el tren a Berlín a las 7:20h.</div>
+          <div class="accom-nights">Noche: 3 Jul · sin cama reservada</div>
         </div>
-        <div class="card-name">${item.name}</div>
-        <div class="card-desc">${item.desc}</div>
-        <div class="card-actions">
-          <a href="${item.maps}" target="_blank" class="maps-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            Abrir en Maps
-          </a>
+      `;
+      stack.appendChild(card);
+      cards.push(card);
+    }
+  } else {
+    const items = DATA[currentCity][currentMode] || [];
+    items.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'card' + (currentMode === 'salir' ? ' night-mode' : '');
+      card.style.transform = `translateY(${i * 100}%)`;
+      let badgeClass = item.badge === 'free' ? 'badge-free' : item.badge === 'paid' ? 'badge-paid' : 'badge-partial';
+      card.innerHTML = `
+        <div class="card-bg" style="background-image:url('${item.img}')"></div>
+        <div class="card-content">
+          <div class="card-badge-row">
+            ${item.warn ? '<span class="badge-warn">⚠️ Leer antes</span>' : ''}
+            <span class="card-badge ${badgeClass}">${item.badgeLabel}</span>
+            <span class="badge-time">⏱ ${item.time}</span>
+            ${currentMode === 'salir' ? '<span class="night-tag">🌙 SALIR</span>' : ''}
+          </div>
+          <div class="card-name">${item.name}</div>
+          <div class="card-desc">${item.desc}</div>
+          <div class="card-actions">
+            <a href="${item.maps}" target="_blank" class="maps-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Abrir en Maps
+            </a>
+          </div>
         </div>
-      </div>
-    `;
-    stack.appendChild(card);
-    cards.push(card);
-  });
+      `;
+      stack.appendChild(card);
+      cards.push(card);
+    });
+  }
 
   updatePositions(true);
   renderDots();
@@ -612,8 +617,7 @@ function goTo(index) {
   renderDots();
 }
 
-const stack = document.getElementById('card-stack');
-
+const stackEl = document.getElementById('card-stack');
 function onStart(y) { isDragging = true; startY = y; cards.forEach(c => c.style.transition = 'none'); }
 function onMove(y) {
   if (!isDragging) return;
@@ -633,13 +637,12 @@ function onEnd(y) {
   else goTo(currentIndex);
 }
 
-stack.addEventListener('touchstart', e => onStart(e.touches[0].clientY), { passive: true });
-stack.addEventListener('touchmove', e => onMove(e.touches[0].clientY), { passive: true });
-stack.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientY));
-stack.addEventListener('mousedown', e => onStart(e.clientY));
+stackEl.addEventListener('touchstart', e => onStart(e.touches[0].clientY), { passive: true });
+stackEl.addEventListener('touchmove', e => onMove(e.touches[0].clientY), { passive: true });
+stackEl.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientY));
+stackEl.addEventListener('mousedown', e => onStart(e.clientY));
 window.addEventListener('mousemove', e => { if (isDragging) onMove(e.clientY); });
 window.addEventListener('mouseup', e => onEnd(e.clientY));
-
 document.addEventListener('keydown', e => {
   if (!currentCity) return;
   if (e.key === 'ArrowDown') goTo(currentIndex + 1);
