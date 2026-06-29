@@ -207,9 +207,20 @@ const TRANSPORT = {
       transfers: []
     }
   },
-  split: {
+  napoles: {
     arrival: {
-      type: "✈️ Vuelo",
+      type: "✈️ Vuelo", label: "LLEGADA",
+      from: "Aeropuerto Budapest → Aeropuerto Nápoles",
+      date: "9 Jul · 14:25 → 16:10",
+      code: "WNDFSM", airline: "Wizz Air Malta", transfers: []
+    },
+    departure: {
+      type: "✈️ Vuelo", label: "SALIDA",
+      from: "Aeropuerto Nápoles → Aeropuerto Split",
+      date: "10 Jul · 6:15 → 7:15",
+      code: "P9QZYM", airline: "Volotea", transfers: []
+    }
+  },
       label: "LLEGADA",
       from: "Aeropuerto Nápoles → Aeropuerto Split",
       date: "10 Jul · 6:15 → 7:15",
@@ -270,8 +281,7 @@ const ACCOM = {
     nights: "Noche: 8 Jul (1 noche)",
     maps: "https://maps.google.com/?q=Rumbach+Sebestyén+utca+10,+Budapest+1075"
   },
-  split: {
-    address: "Put Znjana 27b, 21000 Split, Croacia",
+  napoles: null,, 21000 Split, Croacia",
     nights: "Noches: 10, 11, 12 Jul (3 noches)",
     maps: "https://maps.google.com/?q=Put+Znjana+27b,+21000+Split"
   },
@@ -289,7 +299,7 @@ const CITY_META = {
   berlin:    { dates: "4–6 Jul" },
   praga:     { dates: "6–8 Jul" },
   budapest:  { dates: "8–9 Jul" },
-  split:     { dates: "10–13 Jul" },
+  napoles:   { dates: "9–10 Jul · escala noche" },
   munich:    { dates: "14–16 Jul" }
 };
 
@@ -367,8 +377,56 @@ const DATA = {
       { name: "Distrito VII — Ruin Bars", desc: "El epicentro de la noche en Budapest. Varios edificios de principios del siglo XX en diferentes estados de abandono reconvertidos en bares de varios pisos, con patios, terrazas y salas de música. Ambiente joven, cosmopolita y bastante único. Empieza en Szimpla y deja que la noche lleve al resto.", badge: "free", badgeLabel: "Sin entrada", time: "A partir de las 22h", img: "https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=800&q=80", maps: "https://maps.google.com/?q=Jewish+Quarter+Budapest+nightlife" }
     ]
   },
-  split: {
-    name: "Split", flag: "🇭🇷", country: "Croacia",
+  napoles: {
+    name: "Nápoles", flag: "🇮🇹", country: "Italia · escala nocturna",
+    ver: [
+      {
+        name: "Centro Storico — callejuelas",
+        desc: "El centro histórico de Nápoles es Patrimonio de la Humanidad y una de las ciudades más caóticas, vivas y auténticas de Europa. La Spaccanapoli — la calle que literalmente parte la ciudad en dos — es el eje: pizzerías centenarias, iglesias barrocas, puestos de comida, gente en las ventanas. No necesitas un plan concreto. Sal del metro en Dante o en Università y camina.",
+        badge: "free", badgeLabel: "Gratis", time: "16:30 → 20:00",
+        img: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=800&q=80",
+        maps: "https://maps.google.com/?q=Spaccanapoli,+Naples"
+      },
+      {
+        name: "Pizza en L'Antica Pizzeria da Michele",
+        desc: "La pizzería más famosa del mundo y la razón por la que Nápoles existe en el mapa gastronómico. Solo hacen dos pizzas: Margherita y Marinara. La cola puede ser larga pero se mueve rápido. Si la cola está cerrada, cualquier pizzería del centro histórico por debajo de 6€ es mejor que cualquier pizza que hayas comido en tu vida.",
+        badge: "paid", badgeLabel: "~5€ la pizza", time: "Cena · 20:00-21:30",
+        img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80",
+        maps: "https://maps.google.com/?q=L'Antica+Pizzeria+da+Michele,+Naples"
+      },
+      {
+        name: "Lungomare — paseo marítimo",
+        desc: "El paseo marítimo frente al Golfo de Nápoles con el Vesubio al fondo. De noche iluminado con el volcán detrás es una de las vistas más impresionantes de Italia. Largo, tranquilo y perfecto para caminar después de cenar. Está a 20 minutos andando del centro histórico o 2 paradas de metro.",
+        badge: "free", badgeLabel: "Gratis", time: "Después de cenar · 22:00",
+        img: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&q=80",
+        maps: "https://maps.google.com/?q=Lungomare+Caracciolo,+Naples"
+      }
+    ],
+    salir: [
+      {
+        name: "Piazza Bellini",
+        desc: "La plaza más animada del centro histórico cuando cae la noche. Bares con mesas fuera, ambiente universitario y muy local, precios italianos (una cerveza a 3-4€) y gente de todas las edades mezclada. No es turística. En julio con calor las terrazas están a tope desde las 22h. El sitio perfecto para tomar unas cervezas sin complicaciones.",
+        badge: "free", badgeLabel: "Sin entrada", time: "22:00 → 01:00",
+        img: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=800&q=80",
+        maps: "https://maps.google.com/?q=Piazza+Bellini,+Naples"
+      },
+      {
+        name: "Piazza del Gesù Nuovo",
+        desc: "Plaza grande y abierta en el corazón del centro histórico rodeada de bares y con mucho espacio para sentarse. Más tranquila que Bellini pero con el mismo ambiente local. Buena opción si Bellini está demasiado llena o si preferís algo más sentado y relajado antes de tirar hacia el aeropuerto.",
+        badge: "free", badgeLabel: "Sin entrada", time: "22:00 → 01:00",
+        img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80",
+        maps: "https://maps.google.com/?q=Piazza+del+Gesù+Nuovo,+Naples"
+      },
+      {
+        name: "⏰ Vuelta al aeropuerto · 4:00h",
+        desc: "El aeropuerto Capodichino está a 15 minutos del centro en taxi o Uber. El vuelo sale a las 6:15h — estad en el aeropuerto antes de las 4:30h para no correr. Calculad salir de Piazza Bellini sobre las 3:45h como muy tarde. Los taxis nocturnos en Nápoles son abundantes y el trayecto cuesta unos 15-20€ entre todos.",
+        badge: "partial", badgeLabel: "⚠️ No perder el vuelo", time: "Salida máx. 3:45h",
+        img: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&q=80",
+        maps: "https://maps.google.com/?q=Naples+Capodichino+Airport",
+        warn: true
+      }
+    ]
+  }, flag: "🇭🇷", country: "Croacia",
     ver: [
       { name: "Palacio de Diocleciano", desc: "Un palacio romano del siglo IV donde hoy vive gente de verdad. Dentro de las murallas hay bares, tiendas, apartamentos y restaurantes. Caminar por los callejones de piedra de 1.700 años con gente tendiendo ropa en las ventanas es algo que no tiene equivalente en ningún otro sitio del mundo.", badge: "free", badgeLabel: "Gratis (exterior)", time: "Cualquier hora", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", maps: "https://maps.google.com/?q=Diocletian+Palace,+Split" },
       { name: "Riva — paseo marítimo", desc: "El paseo frente al Adriático donde toda la ciudad acaba pasando en algún momento del día. Cafés con terraza, palmeras, barcos en el puerto y el mar delante. Es el sitio donde los locales se sientan a no hacer nada y eso lo convierte en el mejor plan de media tarde.", badge: "free", badgeLabel: "Gratis", time: "Atardecer", img: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80", maps: "https://maps.google.com/?q=Riva+promenade,+Split" },
@@ -395,7 +453,7 @@ const DATA = {
   }
 };
 
-const CITY_ORDER = ['amsterdam','rotterdam','berlin','praga','budapest','split','munich'];
+const CITY_ORDER = ['amsterdam','rotterdam','berlin','praga','budapest','napoles','split','munich'];
 const MODES = [
   { id: 'transporte', label: '🚆 Transporte' },
   { id: 'alojamiento', label: '🏠 Alojamiento' },
